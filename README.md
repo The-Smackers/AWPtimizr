@@ -54,7 +54,7 @@ Tweaks are split into subfolders—numbered for order, packed with `.reg` files 
 - **System**: Leaner, snappier—7800X3D/4080 Super approved.
 
 ## Why?
-Tweaks based on this video https://www.youtube.com/watch?v=qG7C4W-EQl4 by [youtube.com/@KEROVSKI_](https://www.youtube.com/@KEROVSKI_).
+Tweaks based on this video: [Make Your CS2 RUN BETTER - (packet loss, latency, clean)](https://www.youtube.com/watch?v=qG7C4W-EQl4) by [youtube.com/@KEROVSKI_](https://www.youtube.com/@KEROVSKI_).
 Need for this repo grew from my TerminalTanks setup; gaming, coding, plants, and planted tanks. Pair Win 11 with Powertoys running FancyZones for window snaps and Workspaces for one-click launches (MPC-HC auto-play baked in). For CS2 enjoyers, voyeurs, fish nerds and frame chasers.
 
 ## Contribute
