@@ -43,10 +43,11 @@ Tweaks are split into subfolders—numbered for order, packed with `.reg` files 
   - `Revert CS2 Firewall Rules.cmd`: Removes CS2 firewall rules.
 
 ## Usage
-1. **Tweaks**: Double-click `.reg` files or `Latency_Tweaks.cmd`—UAC will prompt for admin rights.  
-2. **Revert**: Pick specific reverts or use `full_reset.cmd` for a full rollback.  
-3. **Reboot**: Most tweaks need a restart—CS2 feels it, Topaz doesn’t care.  
-4. **Backup**: Export your registry first—safety’s clutch (`reg export HKLM\backup.reg`).
+1. **Tweaks**: Double-click `.reg` files or `Latency_Tweaks.cmd`—UAC will prompt for admin rights.
+2. **CS2 Path**: Scripts like `CS2 Firewall Rules.cmd` and `CS2 High Performance.cmd` use `CS2Path.txt`.
+3. **Revert**: Pick specific reverts or use `full_reset.cmd` for a full rollback.  
+4. **Reboot**: Most tweaks need a restart—CS2 feels it, Topaz doesn’t care.  
+5. **Backup**: Export your registry first—safety’s clutch (`reg export HKLM\backup.reg`).
 
 ## Results
 - **CS2**: ~590 > 700 FPS, aim, tighter input (Wooting + latency tweaks).  

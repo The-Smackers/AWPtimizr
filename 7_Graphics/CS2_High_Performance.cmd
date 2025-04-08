@@ -46,27 +46,16 @@ if %errorlevel% neq 0 (
     exit /b
 )
 
-rem Check if rules already exist
-set "INBOUND_EXISTS="
-set "OUTBOUND_EXISTS="
-for /f "tokens=1,2" %%A in ('netsh advfirewall firewall show rule name^="CS2 - Inbound"') do (
-    if "%%A %%B"=="Rule Name:" set "INBOUND_EXISTS=1"
-)
-for /f "tokens=1,2" %%A in ('netsh advfirewall firewall show rule name^="CS2 - Outbound"') do (
-    if "%%A %%B"=="Rule Name:" set "OUTBOUND_EXISTS=1"
-)
-
-if defined INBOUND_EXISTS if defined OUTBOUND_EXISTS (
-    echo CS2 firewall rules already exist. Skipping...
+rem Set CS2 to High performance
+echo Setting CS2 to High performance...
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX\UserGpuPreferences" /v "!CS2_PATH!" /t REG_SZ /d "GpuPreference=2;" /f
+if !errorlevel! equ 0 (
+    echo Done! CS2 set to High performance at !CS2_PATH!.
+) else (
+    echo Failed to set graphics preference. Check admin rights.
     pause
-    exit /b 0
+    exit /b 1
 )
-
-rem Add firewall rules
-echo Adding CS2 firewall rules...
-netsh advfirewall firewall add rule name="CS2 - Inbound" dir=in action=allow program="!CS2_PATH!" enable=yes
-netsh advfirewall firewall add rule name="CS2 - Outbound" dir=out action=allow program="!CS2_PATH!" enable=yes
-echo Done! Rules applied for cs2.exe at !CS2_PATH!.
 pause
 exit /b
 

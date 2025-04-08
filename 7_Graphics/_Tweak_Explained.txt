@@ -1,0 +1,11 @@
+Scripting cs2.exe to "High performance"
+
+Manual Setting: In System > Display > Graphics, you set cs2.exe to "High performance"—forces it to use your 4080 Super (not integrated graphics, if present) and hints at max performance.
+
+Registry Key: This lives in HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX\UserGpuPreferences—maps executables to GPU and power profiles.
+
+Value: GpuPreference=2 = High performance (1 = Power saving, 0 = Default).
+
+Script: CS2 High Performance.cmd
+
+Features: Sets cs2.exe to High performance, configurable path, UAC elevation.
