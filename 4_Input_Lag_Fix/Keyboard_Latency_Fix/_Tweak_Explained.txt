@@ -1,0 +1,37 @@
+Registry Tweak Explained:
+
+Most people pick High End or Mid Tier.
+
+Low End: Cheap keyboards (e.g., Dell membrane).
+Focus: Stability—stock queue (100), multi-port (1), no fancy tweaks.
+
+Mid Tier: 1000Hz keyboards (Logitech G Pro X, Logitech G915, Logitech G413, Razer BlackWidow, Ducky) rely on vendor software (e.g., Synapse, iCUE) for profiling—WPP’s overkill.
+Focus: Balance—single-port (0), medium queue (80), slight port limit (4).
+
+High End and/or 8000Hz keyboards (Razer Huntsman V3/V3 Pro, Corsair K70, Logitech G515, SteelSeries Apex Pro, DIY).
+
+Path: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\kbdclass\Parameters
+
+Changes?
+
+"ConnectMultiplePorts"=0: Limits to one port.
+
+"KeyboardDataQueueSize"=50 (32 hex): Smaller buffer (default ~100).
+
+"MaximumPortsServiced"=3: Caps ports serviced.
+
+"SendOutputToAllPorts"=1: Enables multi-port output.
+
+Safety?
+
+BSOD Risk: Low—keyboard driver tweaks rarely crash unless hardware conflicts.
+
+FACEIT: Fine—no anti-cheat flags.
+
+Effectiveness?
+
+CS2: Aims for lower input lag (~1ms) via smaller queue. Negligible unless your keyboard’s polling rate maxes out (e.g., 1000Hz).
+
+Risk: Smaller queue might drop inputs if spammed—rare in CS2.
+
+Okay?: Yes, subtle tweak—keep unless input lags.
