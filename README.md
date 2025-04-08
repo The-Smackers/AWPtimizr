@@ -39,7 +39,7 @@ Tweaks are split into subfolders—numbered for order, packed with `.reg` files 
   - `Latency_Tweaks.cmd`: Disables dynamic tick, HPET—lowers input lag (UAC-enabled).
 
 - **`6 Firewall Optimization`**  
-  - `CS2 Firewall Rules.cmd`: Allows inbound/outbound for `cs2.exe`—configurable path, CS2 multiplayer flows.  
+  - `CS2 Firewall Rules.cmd`: Allows inbound/outbound for `cs2.exe`—auto-detects path, skips if rules exist, saves to `CS2Path.txt`.
   - `Revert CS2 Firewall Rules.cmd`: Removes CS2 firewall rules.
 
 ## Usage
