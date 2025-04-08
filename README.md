@@ -36,7 +36,11 @@ Tweaks are split into subfolders—numbered for order, packed with `.reg` files 
   - `full_reset.cmd`: Runs all reverts silently.
 
 - **`5 Latency Tweaks`**  
-  - `Latency_Tweaks.cmd`: Disables dynamic tick, HPET—lowers input lag (UAC-enabled).  
+  - `Latency_Tweaks.cmd`: Disables dynamic tick, HPET—lowers input lag (UAC-enabled).
+
+- **`6 Firewall Optimization`**  
+  - `CS2 Firewall Rules.cmd`: Allows inbound/outbound for `cs2.exe`—configurable path, CS2 multiplayer flows.  
+  - `Revert CS2 Firewall Rules.cmd`: Removes CS2 firewall rules.
 
 ## Usage
 1. **Tweaks**: Double-click `.reg` files or `Latency_Tweaks.cmd`—UAC will prompt for admin rights.  
@@ -50,7 +54,8 @@ Tweaks are split into subfolders—numbered for order, packed with `.reg` files 
 - **System**: Leaner, snappier—7800X3D/4080 Super approved.
 
 ## Why?
-Grew from my TerminalTanks setup—gaming, coding, and planted tanks. Pair with FancyZones for window snaps and PowerToys Workspaces for one-click launches (MPC-HC auto-play baked in). For fish nerds and frame chasers.
+Tweaks based on this video https://www.youtube.com/watch?v=qG7C4W-EQl4 by https://www.youtube.com/@KEROVSKI_.
+Need for this repo grew from my TerminalTanks setup; gaming, coding, plants, and planted tanks. Pair Win 11 with Powertoys running FancyZones for window snaps and Workspaces for one-click launches (MPC-HC auto-play baked in). For CS2 enjoyers, voyeurs, fish nerds and frame chasers.
 
 ## Contribute
 Bugs? PRs welcome—fork it, tweak it, share it.  
