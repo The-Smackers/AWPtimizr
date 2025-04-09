@@ -3,7 +3,7 @@ setlocal EnableDelayedExpansion
 
 rem Default CS2 path
 set "DEFAULT_PATH=C:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive\game\bin\win64\cs2.exe"
-set "CONFIG_FILE=%~dp0..\CS2Path.txt"
+set "CONFIG_FILE=!SUMMARY_DIR!\CS2Path.txt"
 set "CS2_PATH="
 
 rem Check if saved path exists

@@ -2,6 +2,10 @@
 setlocal EnableDelayedExpansion
 echo is on
 
+rem Define summary directory
+set "SUMMARY_DIR=%~dp0Summary_%COMPUTERNAME%"
+mkdir "!SUMMARY_DIR!" 2>nul
+
 rem UAC elevation
 net session >nul 2>&1
 if %errorlevel% neq 0 (
@@ -13,7 +17,7 @@ if %errorlevel% neq 0 (
 echo Starting TerminalTanks Revert...
 
 rem CPU type detection
-set "CPU_FILE=%~dp0CPUType.txt"
+set "CPU_FILE=!SUMMARY_DIR!\CPUType.txt"
 set "CPU_TYPE="
 if exist "!CPU_FILE!" (
     set /p CPU_TYPE=<"!CPU_FILE!"

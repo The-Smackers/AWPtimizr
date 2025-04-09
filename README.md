@@ -76,6 +76,8 @@ The `Simulated_Run_All.cmd` and `Run_All.cmd` scripts have been enhanced with th
   - Mode 3 skips the keyboard tweak entirely.
 - **Error Handling**: Improved handling when no tweak files are found, returning to the menu instead of exiting.
 - **Logging**: Continues to log all actions to `Optimization_Log.txt` with timestamps.
+- **Backup Exclusion**: Files in the `Backup` folder are now ignored during tweak processing to prevent accidental execution of backup `.reg` files.
+- **User-Specific Summaries**: Logs (`Optimization_Log.txt`) and configuration files (`CPUType.txt`) are now saved in a `Summary_%COMPUTERNAME%` folder (e.g., `Summary_DESKTOP-ABC123`) in the main directory, making it easier to track tweaks per machine.
 
 Run the script from `D:\Videos\apps\Windows_Optimizations` with admin privileges to apply tweaks. Ensure all referenced `.reg` and `.cmd` files exist in their respective subfolders for full functionality.
 

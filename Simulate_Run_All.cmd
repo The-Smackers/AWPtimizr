@@ -2,6 +2,10 @@
 setlocal EnableDelayedExpansion
 echo is on
 
+rem Define summary directory
+set "SUMMARY_DIR=%~dp0Summary_%COMPUTERNAME%"
+mkdir "!SUMMARY_DIR!" 2>nul
+
 rem UAC elevation
 net session >nul 2>&1
 if %errorlevel% neq 0 (
@@ -13,8 +17,8 @@ if %errorlevel% neq 0 (
 echo Starting TerminalTanks Tweaks Simulation...
 
 rem Initialize logging
-set "LOG_FILE=%~dp0Optimization_Log.txt"
-echo [%DATE% %TIME%] Starting simulation... >> "!LOG_FILE!"
+set "LOG_FILE=!SUMMARY_DIR!\Optimization_Log.txt"
+echo [%DATE% %TIME%] Starting tweak application... >> "!LOG_FILE!"
 
 :menu
 cls
@@ -40,8 +44,21 @@ set /p "BACKUP=Create registry backup before simulation? (y/n): "
 if /i "!BACKUP!"=="y" (
     echo Creating backup...
     echo [%DATE% %TIME%] Creating registry backup... >> "!LOG_FILE!"
-    reg export HKLM\SYSTEM "!BACKUP_PATH!\HKLM_SYSTEM_%DATE:~-4%%DATE:~4,2%%DATE:~7,2%.reg" /y
-    reg export HKCU "!BACKUP_PATH!\HKCU_%DATE:~-4%%DATE:~4,2%%DATE:~7,2%.reg" /y
+    set "BACKUP_HKLM=!BACKUP_PATH!\HKLM_SYSTEM_%DATE:~-4%%DATE:~4,2%%DATE:~7,2%.reg"
+    set "BACKUP_HKCU=!BACKUP_PATH!\HKCU_%DATE:~-4%%DATE:~4,2%%DATE:~7,2%.reg"
+    if exist "!BACKUP_HKLM!" (
+        set /p "OVERWRITE=Backup already exists. Overwrite? (y/n): "
+        if /i "!OVERWRITE!"=="y" (
+            reg export HKLM\SYSTEM "!BACKUP_HKLM!" /y
+            reg export HKCU "!BACKUP_HKCU!" /y
+        ) else (
+            echo Skipping backup creation.
+            echo [%DATE% %TIME%] Skipped backup creation due to existing files. >> "!LOG_FILE!"
+        )
+    ) else (
+        reg export HKLM\SYSTEM "!BACKUP_HKLM!" /y
+        reg export HKCU "!BACKUP_HKCU!" /y
+    )
     echo Backup saved to !BACKUP_PATH!
     echo [%DATE% %TIME%] Backup saved to !BACKUP_PATH! >> "!LOG_FILE!"
 )
@@ -55,11 +72,15 @@ set /p "MODE=Enter choice (1-3): "
 if "!MODE!"=="2" (set "DEFAULT_CHOICE=e") else if "!MODE!"=="3" (set "DEFAULT_CHOICE=s") else (set "DEFAULT_CHOICE=")
 
 rem CPU type detection
-set "CPU_FILE=%~dp0CPUType.txt"
+set "CPU_FILE=!SUMMARY_DIR!\CPUType.txt"
 set "CPU_TYPE="
 if exist "!CPU_FILE!" (
     set /p CPU_TYPE=<"!CPU_FILE!"
-    if /i "!CPU_TYPE!"=="Intel" (
+    if "!CPU_TYPE!"=="" (
+        set "CPU_TYPE="
+        echo CPUType.txt is empty, detecting...
+        echo [%DATE% %TIME%] CPUType.txt is empty, detecting... >> "!LOG_FILE!"
+    ) else if /i "!CPU_TYPE!"=="Intel" (
         echo Using saved CPU type: Intel
         echo [%DATE% %TIME%] Using saved CPU type: Intel >> "!LOG_FILE!"
     ) else if /i "!CPU_TYPE!"=="AMD" (
@@ -92,13 +113,13 @@ if not defined CPU_TYPE (
     echo !CPU_TYPE!>"!CPU_FILE!"
 )
 
-rem Count total files to process (excluding keyboard files, adding 1 for choice)
+rem Count total files to process (excluding keyboard files, adding 1 for choice, excluding Backup)
 set "TOTAL_FILES=0"
 set "PROCESSED_FILES=0"
 echo Scanning subfolders...
 echo [%DATE% %TIME%] Scanning subfolders... >> "!LOG_FILE!"
 
-rem Non-CPU/Input folders
+rem Non-CPU/Input/Backup folders
 for /d %%D in ("%~dp0*") do (
     if /i NOT "%%~nxD"=="1_CPU" if /i NOT "%%~nxD"=="4_Input" (
         for %%F in ("%%D\*.reg" "%%D\*.cmd") do (
@@ -159,7 +180,7 @@ if !TOTAL_FILES! equ 0 (
 
 rem Process files with user prompts (simulated .reg, selective .cmd simulation)
 for /d %%D in ("%~dp0*") do (
-    if /i NOT "%%~nxD"=="1_CPU" if /i NOT "%%~nxD"=="4_Input" (
+    if /i NOT "%%~nxD"=="1_CPU" if /i NOT "%%~nxD"=="4_Input" if /i NOT "%%~nxD"=="Backup" (
         echo Entering folder: %%~nxD
         echo [%DATE% %TIME%] Entering folder: %%~nxD >> "!LOG_FILE!"
         for %%F in ("%%D\*.reg" "%%D\*.cmd") do (
@@ -414,6 +435,7 @@ if exist "!KEYBOARD_PATH!\" (
         echo 4: Wooting 1000hz
         echo 5: Wooting 8000hz
         echo 6: Other 8000hz
+        :keyboard_prompt
         set "KB_CHOICE="
         set /p "KB_CHOICE=Enter choice (1-6): "
         if "!KB_CHOICE!"=="1" (
@@ -434,10 +456,6 @@ if exist "!KEYBOARD_PATH!\" (
         ) else if "!KB_CHOICE!"=="6" (
             set "KB_FILE=!KEYBOARD_PATH!\6_8000hz_Keyboards.reg"
             set "FILE_NAME=6_8000hz_Keyboards.reg"
-        ) else (
-            echo Invalid choice. Skipping keyboard tweak.
-            echo [%DATE% %TIME%] Invalid keyboard choice. Skipping... >> "!LOG_FILE!"
-            set "KB_FILE="
         )
         if defined KB_FILE (
             if exist "!KB_FILE!" (
