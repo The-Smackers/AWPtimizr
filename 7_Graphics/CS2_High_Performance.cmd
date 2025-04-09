@@ -51,12 +51,14 @@ echo Setting CS2 to High performance...
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectX\UserGpuPreferences" /v "!CS2_PATH!" /t REG_SZ /d "GpuPreference=2;" /f
 if !errorlevel! equ 0 (
     echo Done! CS2 set to High performance at !CS2_PATH!.
+     if defined DEFAULT_CHOICE if /i "!DEFAULT_CHOICE!"=="" (
+        pause
+    )
 ) else (
     echo Failed to set graphics preference. Check admin rights.
     pause
     exit /b 1
 )
-pause
 exit /b
 
 :GetCS2Path

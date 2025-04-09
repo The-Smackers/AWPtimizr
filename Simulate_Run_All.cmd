@@ -16,6 +16,23 @@ rem Initialize logging
 set "LOG_FILE=%~dp0Optimization_Log.txt"
 echo [%DATE% %TIME%] Starting simulation... >> "!LOG_FILE!"
 
+:menu
+cls
+echo TerminalTanks Tweaks Simulation
+echo Current Date: %DATE%
+echo.
+echo 1. Run simulation
+echo 2. Exit
+echo.
+set "MENU_CHOICE="
+set /p MENU_CHOICE="Enter choice (1-2): "
+if "!MENU_CHOICE!"=="1" goto simulate
+if "!MENU_CHOICE!"=="2" exit /b
+echo Invalid choice. Please try again.
+timeout /t 2 >nul
+goto menu
+
+:simulate
 rem Backup option
 set "BACKUP_PATH=%~dp0Backup"
 mkdir "!BACKUP_PATH!" 2>nul
@@ -134,10 +151,10 @@ rem Add 1 for the keyboard choice
 set /a TOTAL_FILES+=1
 
 if !TOTAL_FILES! equ 0 (
-    echo No tweak files found in subfolders. Exiting...
-    echo [%DATE% %TIME%] No tweak files found in subfolders. Exiting... >> "!LOG_FILE!"
-    pause
-    exit /b 1
+    echo No tweak files found in subfolders. Returning to menu...
+    echo [%DATE% %TIME%] No tweak files found in subfolders. >> "!LOG_FILE!"
+    timeout /t 2 >nul
+    goto menu
 )
 
 rem Process files with user prompts (simulated .reg, selective .cmd simulation)
@@ -378,65 +395,105 @@ if exist "!KEYBOARD_PATH!\" (
     echo [%DATE% %TIME%] Entering folder: 4_Input\Keyboard >> "!LOG_FILE!"
     set /a PROCESSED_FILES+=1
     set /a "PERCENT=PROCESSED_FILES*100/TOTAL_FILES"
-    echo [!PROCESSED_FILES!/!TOTAL_FILES!] [!PERCENT!%%] Selecting keyboard tweak...
-    echo [%DATE% %TIME%] [!PROCESSED_FILES!/!TOTAL_FILES!] Selecting keyboard tweak... >> "!LOG_FILE!"
-    echo What kind of Keyboard do you have?
-    echo 1: Low End
-    echo 2: Mid Tier
-    echo 3: High End
-    echo 4: Wooting 1000hz
-    echo 5: Wooting 8000hz
-    echo 6: Other 8000hz
-    set "KB_CHOICE="
-    set /p "KB_CHOICE=Enter choice (1-6): "
-    if "!KB_CHOICE!"=="1" (
-        set "KB_FILE=!KEYBOARD_PATH!\1_Low_End_Keyboard.reg"
-        set "FILE_NAME=1_Low_End_Keyboard.reg"
-    ) else if "!KB_CHOICE!"=="2" (
-        set "KB_FILE=!KEYBOARD_PATH!\2_Mid_Tier_Keyboard.reg"
-        set "FILE_NAME=2_Mid_Tier_Keyboard.reg"
-    ) else if="!KB_CHOICE!"=="3" (
-        set "KB_FILE=!KEYBOARD_PATH!\3_High_End_Keyboard.reg"
-        set "FILE_NAME=3_High_End_Keyboard.reg"
-    ) else if "!KB_CHOICE!"=="4" (
+    if defined DEFAULT_CHOICE if /i "!DEFAULT_CHOICE!"=="s" (
+        REM Default to skipping keyboard tweak when mode is "Skip all"
         set "KB_FILE=!KEYBOARD_PATH!\4_Wooting_Fullsized_Keyboard.reg"
         set "FILE_NAME=4_Wooting_Fullsized_Keyboard.reg"
-    ) else if "!KB_CHOICE!"=="5" (
-        set "KB_FILE=!KEYBOARD_PATH!\5_Wooting_Latest_Keyboard.reg"
-        set "FILE_NAME=5_Wooting_Latest_Keyboard.reg"
-    ) else if "!KB_CHOICE!"=="6" (
-        set "KB_FILE=!KEYBOARD_PATH!\6_8000hz_Keyboards.reg"
-        set "FILE_NAME=6_8000hz_Keyboards.reg"
+        echo [!PROCESSED_FILES!/!TOTAL_FILES!] [!PERCENT!%%] Found: !FILE_NAME!
+        echo Auto-choice: s for !FILE_NAME!
+        <nul set /p "=[31m[!PROCESSED_FILES!/!TOTAL_FILES!] Skipped: !FILE_NAME![0m" & echo.
+        echo [%DATE% %TIME%] Skipped: !FILE_NAME! >> "!LOG_FILE!"
     ) else (
-        echo Invalid choice. Skipping keyboard tweak.
-        echo [%DATE% %TIME%] Invalid keyboard choice. Skipping... >> "!LOG_FILE!"
-        set "KB_FILE="
-    )
-    if defined KB_FILE (
-        if exist "!KB_FILEmu_FILE!" (
-            <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] [!PERCENT!%%] Applying: !FILE_NAME![0m" & echo.
-            echo [%DATE% %TIME%] Applying: !FILE_NAME! >> "!LOG_FILE!"
-            rem Post-execution validation
-            echo Checking registry applicability...
-            for /f "delims=" %%K in ('type "!KB_FILE!" ^| findstr /i "HKEY"') do (
-                reg query "%%K" >nul 2>&1
-                if !errorlevel! neq 0 (
-                    echo Warning: %%K may not exist in registry.
-                    echo [%DATE% %TIME%] Warning: %%K may not exist for !FILE_NAME! >> "!LOG_FILE!"
-                )
-            )
-            echo reg-simulated-import "!KB_FILE!"
-            <nul set /p "=[32mSimulated success for !FILE_NAME![0m" & echo.
-            <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
-            echo [%DATE% %TIME%] Simulated success for !FILE_NAME! >> "!LOG_FILE!"
+        REM Prompt for keyboard choice in both Mode 1 and Mode 2
+        echo [!PROCESSED_FILES!/!TOTAL_FILES!] [!PERCENT!%%] Selecting keyboard tweak...
+        echo [%DATE% %TIME%] [!PROCESSED_FILES!/!TOTAL_FILES!] Selecting keyboard tweak... >> "!LOG_FILE!"
+        echo What kind of Keyboard do you have?
+        echo 1: Low End
+        echo 2: Mid Tier
+        echo 3: High End
+        echo 4: Wooting 1000hz
+        echo 5: Wooting 8000hz
+        echo 6: Other 8000hz
+        set "KB_CHOICE="
+        set /p "KB_CHOICE=Enter choice (1-6): "
+        if "!KB_CHOICE!"=="1" (
+            set "KB_FILE=!KEYBOARD_PATH!\1_Low_End_Keyboard.reg"
+            set "FILE_NAME=1_Low_End_Keyboard.reg"
+        ) else if "!KB_CHOICE!"=="2" (
+            set "KB_FILE=!KEYBOARD_PATH!\2_Mid_Tier_Keyboard.reg"
+            set "FILE_NAME=2_Mid_Tier_Keyboard.reg"
+        ) else if "!KB_CHOICE!"=="3" (
+            set "KB_FILE=!KEYBOARD_PATH!\3_High_End_Keyboard.reg"
+            set "FILE_NAME=3_High_End_Keyboard.reg"
+        ) else if "!KB_CHOICE!"=="4" (
+            set "KB_FILE=!KEYBOARD_PATH!\4_Wooting_Fullsized_Keyboard.reg"
+            set "FILE_NAME=4_Wooting_Fullsized_Keyboard.reg"
+        ) else if "!KB_CHOICE!"=="5" (
+            set "KB_FILE=!KEYBOARD_PATH!\5_Wooting_Latest_Keyboard.reg"
+            set "FILE_NAME=5_Wooting_Latest_Keyboard.reg"
+        ) else if "!KB_CHOICE!"=="6" (
+            set "KB_FILE=!KEYBOARD_PATH!\6_8000hz_Keyboards.reg"
+            set "FILE_NAME=6_8000hz_Keyboards.reg"
         ) else (
-            echo [!PROCESSED_FILES!/!TOTAL_FILES!] File not found: !FILE_NAME!
-            echo [%DATE% %TIME%] File not found: !FILE_NAME! >> "!LOG_FILE!"
+            echo Invalid choice. Skipping keyboard tweak.
+            echo [%DATE% %TIME%] Invalid keyboard choice. Skipping... >> "!LOG_FILE!"
+            set "KB_FILE="
+        )
+        if defined KB_FILE (
+            if exist "!KB_FILE!" (
+                if not defined DEFAULT_CHOICE (
+                    REM Mode 1: Prompt for Preview/Execute/Skip
+                    :prompt_user_keyboard
+                    <nul set /p "=[1;33mPreview (p), Execute (e), or Skip (s)? [0m"
+                    set /p "CHOICE="
+                    if /i "!CHOICE!"=="p" (
+                        echo Previewing registry changes:
+                        type "!KB_FILE!"
+                        echo.
+                        echo [%DATE% %TIME%] Previewed: !FILE_NAME! >> "!LOG_FILE!"
+                        goto :prompt_user_keyboard
+                    ) else if /i "!CHOICE!"=="e" (
+                        set "CHOICE=e"
+                    ) else if /i "!CHOICE!"=="s" (
+                        set "CHOICE=s"
+                    ) else (
+                        echo Invalid choice. Enter p, e, or s.
+                        goto :prompt_user_keyboard
+                    )
+                ) else if /i "!DEFAULT_CHOICE!"=="e" (
+                    REM Mode 2: Auto-execute after selection
+                    set "CHOICE=e"
+                    echo Auto-choice: e for !FILE_NAME!
+                )
+                if /i "!CHOICE!"=="e" (
+                    <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] [!PERCENT!%%] Applying: !FILE_NAME![0m" & echo.
+                    echo [%DATE% %TIME%] Applying: !FILE_NAME! >> "!LOG_FILE!"
+                    echo Checking registry applicability...
+                    for /f "delims=" %%K in ('type "!KB_FILE!" ^| findstr /i "HKEY"') do (
+                        reg query "%%K" >nul 2>&1
+                        if !errorlevel! neq 0 (
+                            echo Warning: %%K may not exist in registry.
+                            echo [%DATE% %TIME%] Warning: %%K may not exist for !FILE_NAME! >> "!LOG_FILE!"
+                        )
+                    )
+                    echo reg-simulated-import "!KB_FILE!"
+                    <nul set /p "=[32mSimulated success for !FILE_NAME![0m" & echo.
+                    <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
+                    echo [%DATE% %TIME%] Simulated success for !FILE_NAME! >> "!LOG_FILE!"
+                ) else if /i "!CHOICE!"=="s" (
+                    <nul set /p "=[31m[!PROCESSED_FILES!/!TOTAL_FILES!] Skipped: !FILE_NAME![0m" & echo.
+                    echo [%DATE% %TIME%] Skipped: !FILE_NAME! >> "!LOG_FILE!"
+                )
+            ) else (
+                echo [!PROCESSED_FILES!/!TOTAL_FILES!] File not found: !FILE_NAME!
+                echo [%DATE% %TIME%] File not found: !FILE_NAME! >> "!LOG_FILE!"
+            )
         )
     )
 )
 
 echo Simulation complete! No changes applied to registry.
 echo [%DATE% %TIME%] Simulation complete! >> "!LOG_FILE!"
+timeout /t 2 >nul
 pause
-exit /b
+goto menu

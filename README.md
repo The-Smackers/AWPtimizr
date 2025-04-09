@@ -62,6 +62,23 @@ The `Simulated_Run_All.cmd` and `Run_All.cmd` scripts have been enhanced with th
 - **Post-Execution Validation**: Checks if registry keys in `.reg` files exist before applying, with warnings logged if not found.
 - **Visual Feedback**: Displays a progress percentage (e.g., `[5/10] [50%]`) alongside file processing status.
 
+### Updates to Run_All.cmd (April 2025)
+
+- **Menu System**: Added a main menu with options to "Run application" (1) or "Exit" (2). After tweak application, the script returns to the menu instead of exiting, allowing multiple runs without restarting the script.
+- **Execution Modes**: Enhanced execution mode behavior:
+  - **Mode 1 (Prompt)**: Prompts for each file with `Preview/Execute/Skip` options, including a keyboard selection prompt followed by `p/e/s`.
+  - **Mode 2 (Execute All)**: Automatically executes all files, prompts for keyboard choice, then auto-executes the selected tweak.
+  - **Mode 3 (Skip All)**: Skips all files, including keyboard tweaks, with `4_Wooting_Fullsized_Keyboard.reg` as the default skipped file.
+- **Keyboard Selection**: Unified keyboard selection logic across modes:
+  - Prompts for keyboard type (1-6) in Modes 1 and 2.
+  - Mode 1 allows full control with `p/e/s` after selection.
+  - Mode 2 auto-executes the chosen keyboard tweak.
+  - Mode 3 skips the keyboard tweak entirely.
+- **Error Handling**: Improved handling when no tweak files are found, returning to the menu instead of exiting.
+- **Logging**: Continues to log all actions to `Optimization_Log.txt` with timestamps.
+
+Run the script from `D:\Videos\apps\Windows_Optimizations` with admin privileges to apply tweaks. Ensure all referenced `.reg` and `.cmd` files exist in their respective subfolders for full functionality.
+
 ### Usage Notes
 - Run scripts with administrative privileges (UAC prompt will appear if needed).
 - The user prompt (`Preview (p), Execute (e), or Skip (s)?`) is now in bold yellow for better visibility.

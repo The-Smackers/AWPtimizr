@@ -58,7 +58,9 @@ for /f "tokens=1,2" %%A in ('netsh advfirewall firewall show rule name^="CS2 - O
 
 if defined INBOUND_EXISTS if defined OUTBOUND_EXISTS (
     echo CS2 firewall rules already exist. Skipping...
-    pause
+    if defined DEFAULT_CHOICE if /i "!DEFAULT_CHOICE!"=="" (
+        pause
+    )
     exit /b 0
 )
 
@@ -67,7 +69,9 @@ echo Adding CS2 firewall rules...
 netsh advfirewall firewall add rule name="CS2 - Inbound" dir=in action=allow program="!CS2_PATH!" enable=yes
 netsh advfirewall firewall add rule name="CS2 - Outbound" dir=out action=allow program="!CS2_PATH!" enable=yes
 echo Done! Rules applied for cs2.exe at !CS2_PATH!.
-pause
+if defined DEFAULT_CHOICE if /i "!DEFAULT_CHOICE!"=="" (
+    pause
+)
 exit /b
 
 :GetCS2Path
