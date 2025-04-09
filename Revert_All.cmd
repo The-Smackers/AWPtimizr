@@ -53,7 +53,7 @@ echo Scanning revert subfolders...
 
 rem Non-CPU/Input folders with Revert subfolder
 for /d %%D in ("%~dp0*") do (
-    if /i NOT "%%~nxD"=="1_CPU" if /i NOT "%%~nxD"=="4_Input" (
+    if /i NOT "%%~nxD"=="1_CPU" if /i NOT "%%~nxD"=="4_Input" if /i NOT "%%~nxD"=="Backup" (
         if exist "%%D\Revert\" (
             for %%F in ("%%D\Revert\*.reg" "%%D\Revert\*.cmd") do (
                 set "FILE_NAME=%%~nxF"
@@ -98,7 +98,7 @@ echo Applying revert tweaks...
 rem Apply revert tweaks (no prompts)
 set "PROCESSED_FILES=0"
 for /d %%D in ("%~dp0*") do (
-    if /i NOT "%%~nxD"=="1_CPU" if /i NOT "%%~nxD"=="4_Input" (
+    if /i NOT "%%~nxD"=="1_CPU" if /i NOT "%%~nxD"=="4_Input" if /i NOT "%%~nxD"=="Backup" (
         if exist "%%D\Revert\" (
             echo Entering folder: %%D\Revert
             for %%F in ("%%D\Revert\*.reg" "%%D\Revert\*.cmd") do (

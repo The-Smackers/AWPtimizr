@@ -78,6 +78,8 @@ The `Simulated_Run_All.cmd` and `Run_All.cmd` scripts have been enhanced with th
 - **Logging**: Continues to log all actions to `Optimization_Log.txt` with timestamps.
 - **Backup Exclusion**: Files in the `Backup` folder are now ignored during tweak processing to prevent accidental execution of backup `.reg` files.
 - **User-Specific Summaries**: Logs (`Optimization_Log.txt`) and configuration files (`CPUType.txt`) are now saved in a `Summary_%COMPUTERNAME%` folder (e.g., `Summary_DESKTOP-ABC123`) in the main directory, making it easier to track tweaks per machine.
+- **Registry Feedback**: Enhanced `.reg` processing to always check and report registry key status ("Key exists" with values or "Key does not exist") before applying tweaks, consistent across `Run_All.cmd` and `Simulated_Run_All.cmd`.
+- **Simulated_Run_All.cmd**: Updated to match `Run_All.cmd` registry feedback, always checking and reporting key status ("Key exists" with values or "Key does not exist") before simulating tweaks with `reg-simulated-import`. Retains selective `.cmd` simulation for `Latency_Tweaks.cmd`.
 
 Run the script from `D:\Videos\apps\Windows_Optimizations` with admin privileges to apply tweaks. Ensure all referenced `.reg` and `.cmd` files exist in their respective subfolders for full functionality.
 

@@ -14,7 +14,7 @@ if %errorlevel% neq 0 (
     exit /b
 )
 
-echo Starting TerminalTanks Tweaks Application...
+echo Starting TerminalTanks CS2 Tweaks Application...
 
 rem Initialize logging
 set "LOG_FILE=!SUMMARY_DIR!\Optimization_Log.txt"
@@ -22,7 +22,7 @@ echo [%DATE% %TIME%] Starting tweak application... >> "!LOG_FILE!"
 
 :tweakmenu
 cls
-echo TerminalTanks Tweaks Application
+echo TerminalTanks CS2 Tweaks Application
 echo Current Date: %DATE%
 echo.
 echo 1. Run application
@@ -41,7 +41,7 @@ goto tweakmenu
 rem Backup option
 set "BACKUP_PATH=%~dp0Backup"
 mkdir "!BACKUP_PATH!" 2>nul
-set /p "BACKUP=Create registry backup before applying tweaks? (y/n): "
+set /p "BACKUP=Create registry backup before applying CS2 tweaks? (y/n): "
 if /i "!BACKUP!"=="y" (
     echo Creating backup...
     echo [%DATE% %TIME%] Creating registry backup... >> "!LOG_FILE!"
@@ -122,7 +122,7 @@ echo [%DATE% %TIME%] Scanning subfolders... >> "!LOG_FILE!"
 
 rem Non-CPU/Input/Backup folders
 for /d %%D in ("%~dp0*") do (
-    if /i NOT "%%~nxD"=="1_CPU" if /i NOT "%%~nxD"=="4_Input" (
+    if /i NOT "%%~nxD"=="1_CPU" if /i NOT "%%~nxD"=="4_Input" if /i NOT "%%~nxD"=="Backup" (
         for %%F in ("%%D\*.reg" "%%D\*.cmd") do (
             set "FILE_NAME=%%~nxF"
             set "SKIP=0"
@@ -173,7 +173,7 @@ rem Add 1 for the keyboard choice
 set /a TOTAL_FILES+=1
 
 if !TOTAL_FILES! equ 0 (
-    echo No tweak files found in subfolders. Exiting...
+    echo No tweak files found in subfolders. Returning to menu...
     echo [%DATE% %TIME%] No tweak files found in subfolders. Returning to menu... >> "!LOG_FILE!"
     timeout /t 2 >nul
     goto tweakmenu
@@ -218,13 +218,22 @@ for /d %%D in ("%~dp0*") do (
                     <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Applying: !FILE_NAME![0m" & echo.
                     echo [%DATE% %TIME%] Applying: !FILE_NAME! >> "!LOG_FILE!"
                     if /i "%%~xF"==".reg" (
-                        rem Post-execution validation
                         echo Checking registry applicability...
                         for /f "delims=" %%K in ('type "%%F" ^| findstr /i "HKEY"') do (
                             reg query "%%K" >nul 2>&1
-                            if !errorlevel! neq 0 (
-                                echo Warning: %%K may not exist in registry.
-                                echo [%DATE% %TIME%] Warning: %%K may not exist for !FILE_NAME! >> "!LOG_FILE!"
+                            if !errorlevel! equ 0 (
+                                echo Key exists: %%K
+                                echo [%DATE% %TIME%] Key exists: %%K for !FILE_NAME! >> "!LOG_FILE!"
+                                rem Show key values
+                                for /f "tokens=1,2,3" %%V in ('reg query "%%K"') do (
+                                    if "%%V"=="!%%V!" if not "%%W"=="" (
+                                        echo   Value: %%V = %%W
+                                        echo [%DATE% %TIME%]   Value: %%V = %%W for !FILE_NAME! >> "!LOG_FILE!"
+                                    )
+                                )
+                            ) else (
+                                echo Key does not exist: %%K
+                                echo [%DATE% %TIME%] Key does not exist: %%K for !FILE_NAME! >> "!LOG_FILE!"
                             )
                         )
                         reg import "%%F" /reg:64
@@ -294,13 +303,22 @@ if exist "!CPU_PATH!\" (
                 <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Applying: !FILE_NAME![0m" & echo.
                 echo [%DATE% %TIME%] Applying: !FILE_NAME! >> "!LOG_FILE!"
                 if /i "%%~xF"==".reg" (
-                    rem Post-execution validation
                     echo Checking registry applicability...
                     for /f "delims=" %%K in ('type "%%F" ^| findstr /i "HKEY"') do (
                         reg query "%%K" >nul 2>&1
-                        if !errorlevel! neq 0 (
-                            echo Warning: %%K may not exist in registry.
-                            echo [%DATE% %TIME%] Warning: %%K may not exist for !FILE_NAME! >> "!LOG_FILE!"
+                        if !errorlevel! equ 0 (
+                            echo Key exists: %%K
+                            echo [%DATE% %TIME%] Key exists: %%K for !FILE_NAME! >> "!LOG_FILE!"
+                            rem Show key values
+                            for /f "tokens=1,2,3" %%V in ('reg query "%%K"') do (
+                                if "%%V"=="!%%V!" if not "%%W"=="" (
+                                    echo   Value: %%V = %%W
+                                    echo [%DATE% %TIME%]   Value: %%V = %%W for !FILE_NAME! >> "!LOG_FILE!"
+                                )
+                            )
+                        ) else (
+                            echo Key does not exist: %%K
+                            echo [%DATE% %TIME%] Key does not exist: %%K for !FILE_NAME! >> "!LOG_FILE!"
                         )
                     )
                     reg import "%%F" /reg:64
@@ -369,13 +387,22 @@ if exist "!MOUSE_PATH!\" (
                 <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Applying: !FILE_NAME![0m" & echo.
                 echo [%DATE% %TIME%] Applying: !FILE_NAME! >> "!LOG_FILE!"
                 if /i "%%~xF"==".reg" (
-                    rem Post-execution validation
                     echo Checking registry applicability...
                     for /f "delims=" %%K in ('type "%%F" ^| findstr /i "HKEY"') do (
                         reg query "%%K" >nul 2>&1
-                        if !errorlevel! neq 0 (
-                            echo Warning: %%K may not exist in registry.
-                            echo [%DATE% %TIME%] Warning: %%K may not exist for !FILE_NAME! >> "!LOG_FILE!"
+                        if !errorlevel! equ 0 (
+                            echo Key exists: %%K
+                            echo [%DATE% %TIME%] Key exists: %%K for !FILE_NAME! >> "!LOG_FILE!"
+                            rem Show key values
+                            for /f "tokens=1,2,3" %%V in ('reg query "%%K"') do (
+                                if "%%V"=="!%%V!" if not "%%W"=="" (
+                                    echo   Value: %%V = %%W
+                                    echo [%DATE% %TIME%]   Value: %%V = %%W for !FILE_NAME! >> "!LOG_FILE!"
+                                )
+                            )
+                        ) else (
+                            echo Key does not exist: %%K
+                            echo [%DATE% %TIME%] Key does not exist: %%K for !FILE_NAME! >> "!LOG_FILE!"
                         )
                     )
                     reg import "%%F" /reg:64
@@ -495,9 +522,19 @@ if exist "!KEYBOARD_PATH!\" (
                     echo Checking registry applicability...
                     for /f "delims=" %%K in ('type "!KB_FILE!" ^| findstr /i "HKEY"') do (
                         reg query "%%K" >nul 2>&1
-                        if !errorlevel! neq 0 (
-                            echo Warning: %%K may not exist in registry.
-                            echo [%DATE% %TIME%] Warning: %%K may not exist for !FILE_NAME! >> "!LOG_FILE!"
+                        if !errorlevel! equ 0 (
+                            echo Key exists: %%K
+                            echo [%DATE% %TIME%] Key exists: %%K for !FILE_NAME! >> "!LOG_FILE!"
+                            rem Show key values
+                            for /f "tokens=1,2,3" %%V in ('reg query "%%K"') do (
+                                if "%%V"=="!%%V!" if not "%%W"=="" (
+                                    echo   Value: %%V = %%W
+                                    echo [%DATE% %TIME%]   Value: %%V = %%W for !FILE_NAME! >> "!LOG_FILE!"
+                                )
+                            )
+                        ) else (
+                            echo Key does not exist: %%K
+                            echo [%DATE% %TIME%] Key does not exist: %%K for !FILE_NAME! >> "!LOG_FILE!"
                         )
                     )
                     reg import "!KB_FILE!" /reg:64
@@ -520,7 +557,7 @@ if exist "!KEYBOARD_PATH!\" (
     )
 )
 
-echo Tweaks application complete! Restart recommended.
+echo CS2 Tweaks application complete! Restart recommended.
 echo [%DATE% %TIME%] Tweaks application complete! Restart recommended. >> "!LOG_FILE!"
 timeout /t 2 >nul
 pause
