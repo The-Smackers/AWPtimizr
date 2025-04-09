@@ -51,6 +51,37 @@ Boost your Windows 11 gaming rig with TerminalTanks—a collection of `.reg` and
 ## Commit History
 - Latest: "Fixed keyboard menu, added registry key echo in Run_All/Simulate_Run_All" - April 08, 2025.
 
+## New Features (April 2025 Update)
+
+The `Simulated_Run_All.cmd` and `Run_All.cmd` scripts have been enhanced with the following features:
+
+- **Logging**: All actions (found files, execution, skips, failures) are logged to `Optimization_Log.txt` with timestamps.
+- **Backup Option**: Optionally create a registry backup (HKLM\SYSTEM and HKCU) before applying tweaks, saved to a `Backup` folder.
+- **Preview Mode**: View the contents of `.reg` files before deciding to execute or skip (type `p` at the prompt).
+- **Batch Execution**: Choose at the start to prompt for each file (default), execute all automatically, or skip all.
+- **Post-Execution Validation**: Checks if registry keys in `.reg` files exist before applying, with warnings logged if not found.
+- **Visual Feedback**: Displays a progress percentage (e.g., `[5/10] [50%]`) alongside file processing status.
+
+### Usage Notes
+- Run scripts with administrative privileges (UAC prompt will appear if needed).
+- The user prompt (`Preview (p), Execute (e), or Skip (s)?`) is now in bold yellow for better visibility.
+- Check `Optimization_Log.txt` after execution for a detailed run history.
+- Backups are timestamped (e.g., `HKLM_SYSTEM_20250408.reg`) and stored in the `Backup` subfolder.
+
+### Example
+```cmd
+Choose execution mode:
+1: Prompt for each file (default)
+2: Execute all automatically
+3: Skip all automatically
+Enter choice (1-3): 1
+
+[1/10] [10%] Found: Disable_Telemetry.reg
+Preview (p), Execute (e), or Skip (s)? e
+[1/10] Applying: Disable_Telemetry.reg
+[1/10] Success: Disable_Telemetry.reg
+```
+
 ## Notes
 - Tested on Ryzen 7 7800X3D, RTX 4080 SUPER.
 - Create `CPUType.txt` if missing—script auto-detects AMD/Intel.
