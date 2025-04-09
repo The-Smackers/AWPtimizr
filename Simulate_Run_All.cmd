@@ -43,7 +43,7 @@ if not defined CPU_TYPE (
     echo !CPU_TYPE!>"!CPU_FILE!"
 )
 
-rem Count total files to process
+rem Count total files to process (excluding keyboard files, adding 1 for choice)
 set "TOTAL_FILES=0"
 set "PROCESSED_FILES=0"
 echo Scanning subfolders...
@@ -79,22 +79,23 @@ if exist "!CPU_PATH!\" (
     )
 )
 
-rem Input folder (Mouse and Keyboard)
-for %%S in ("Mouse" "Keyboard") do (
-    set "INPUT_PATH=%~dp04_Input\%%S"
-    if exist "!INPUT_PATH!\" (
-        for %%F in ("!INPUT_PATH!\*.reg" "!INPUT_PATH!\*.cmd") do (
-            set "FILE_NAME=%%~nxF"
-            set "SKIP=0"
-            if /i "!FILE_NAME:revert=!" NEQ "!FILE_NAME!" set "SKIP=1"
-            if /i "!FILE_NAME!"=="full_reset.cmd" set "SKIP=1"
-            if "!SKIP!"=="0" (
-                set /a TOTAL_FILES+=1
-                <nul set /p "=[32mFound: %%F[0m" & echo.
-            )
+rem Input folder (Mouse only)
+set "MOUSE_PATH=%~dp04_Input\Mouse"
+if exist "!MOUSE_PATH!\" (
+    for %%F in ("!MOUSE_PATH!\*.reg" "!MOUSE_PATH!\*.cmd") do (
+        set "FILE_NAME=%%~nxF"
+        set "SKIP=0"
+        if /i "!FILE_NAME:revert=!" NEQ "!FILE_NAME!" set "SKIP=1"
+        if /i "!FILE_NAME!"=="full_reset.cmd" set "SKIP=1"
+        if "!SKIP!"=="0" (
+            set /a TOTAL_FILES+=1
+            <nul set /p "=[32mFound: %%F[0m" & echo.
         )
     )
 )
+
+rem Add 1 for the keyboard choice
+set /a TOTAL_FILES+=1
 
 if !TOTAL_FILES! equ 0 (
     echo No tweak files found in subfolders. Exiting...
@@ -189,47 +190,93 @@ if exist "!CPU_PATH!\" (
     )
 )
 
-for %%S in ("Mouse" "Keyboard") do (
-    set "INPUT_PATH=%~dp04_Input\%%S"
-    if exist "!INPUT_PATH!\" (
-        echo Entering folder: 4_Input\%%S
-        for %%F in ("!INPUT_PATH!\*.reg" "!INPUT_PATH!\*.cmd") do (
-            set "FILE_NAME=%%~nxF"
-            set "SKIP=0"
-            if /i "!FILE_NAME:revert=!" NEQ "!FILE_NAME!" set "SKIP=1"
-            if /i "!FILE_NAME!"=="full_reset.cmd" set "SKIP=1"
-            if "!SKIP!"=="0" (
-                set /a PROCESSED_FILES+=1
-                <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Found: !FILE_NAME![0m" & echo.
-                :prompt_user_input
-                set "CHOICE="
-                <nul set /p "=Execute [32m(e)[0m or Skip [31m(s)[0m? "
-                set /p "CHOICE="
-                if /i "!CHOICE!"=="e" (
-                    <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Applying: !FILE_NAME![0m" & echo.
-                    if /i "%%~xF"==".reg" (
-                        echo reg-simulated-import "%%F"
-                        <nul set /p "=[32mSimulated success for !FILE_NAME![0m" & echo.
-                        <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
-                    ) else if /i "!FILE_NAME!"=="Latency_Tweaks.cmd" (
-                        echo call-simulated "%%F"
-                        <nul set /p "=[32mSimulated success for !FILE_NAME![0m" & echo.
+if exist "!MOUSE_PATH!\" (
+    echo Entering folder: 4_Input\Mouse
+    for %%F in ("!MOUSE_PATH!\*.reg" "!MOUSE_PATH!\*.cmd") do (
+        set "FILE_NAME=%%~nxF"
+        set "SKIP=0"
+        if /i "!FILE_NAME:revert=!" NEQ "!FILE_NAME!" set "SKIP=1"
+        if /i "!FILE_NAME!"=="full_reset.cmd" set "SKIP=1"
+        if "!SKIP!"=="0" (
+            set /a PROCESSED_FILES+=1
+            <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Found: !FILE_NAME![0m" & echo.
+            :prompt_user_mouse
+            set "CHOICE="
+            <nul set /p "=Execute [32m(e)[0m or Skip [31m(s)[0m? "
+            set /p "CHOICE="
+            if /i "!CHOICE!"=="e" (
+                <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Applying: !FILE_NAME![0m" & echo.
+                if /i "%%~xF"==".reg" (
+                    echo reg-simulated-import "%%F"
+                    <nul set /p "=[32mSimulated success for !FILE_NAME![0m" & echo.
+                    <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
+                ) else if /i "!FILE_NAME!"=="Latency_Tweaks.cmd" (
+                    echo call-simulated "%%F"
+                    <nul set /p "=[32mSimulated success for !FILE_NAME![0m" & echo.
+                    <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
+                ) else (
+                    call "%%F"
+                    if !errorlevel! equ 0 (
                         <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
                     ) else (
-                        call "%%F"
-                        if !errorlevel! equ 0 (
-                            <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
-                        ) else (
-                            echo [!PROCESSED_FILES!/!TOTAL_FILES!] Failed: !FILE_NAME! - Check admin rights or file.
-                        )
+                        echo [!PROCESSED_FILES!/!TOTAL_FILES!] Failed: !FILE_NAME! - Check admin rights or file.
                     )
-                ) else if /i "!CHOICE!"=="s" (
-                    <nul set /p "=[31m[!PROCESSED_FILES!/!TOTAL_FILES!] Skipped: !FILE_NAME![0m" & echo.
-                ) else (
-                    echo Invalid choice. Enter e or s.
-                    goto :prompt_user_input
                 )
+            ) else if /i "!CHOICE!"=="s" (
+                <nul set /p "=[31m[!PROCESSED_FILES!/!TOTAL_FILES!] Skipped: !FILE_NAME![0m" & echo.
+            ) else (
+                echo Invalid choice. Enter e or s.
+                goto :prompt_user_mouse
             )
+        )
+    )
+)
+
+rem Keyboard selection
+set "KEYBOARD_PATH=%~dp04_Input\Keyboard"
+if exist "!KEYBOARD_PATH!\" (
+    echo Entering folder: 4_Input\Keyboard
+    set /a PROCESSED_FILES+=1
+    echo [!PROCESSED_FILES!/!TOTAL_FILES!] Selecting keyboard tweak...
+    echo What kind of Keyboard do you have?
+    echo 1: Low End
+    echo 2: Mid Tier
+    echo 3: High End
+    echo 4: Wooting 1000hz
+    echo 5: Wooting 8000hz
+    echo 6: Other 8000hz
+    set "KB_CHOICE="
+    set /p "KB_CHOICE=Enter choice (1-6): "
+    if "!KB_CHOICE!"=="1" (
+        set "KB_FILE=!KEYBOARD_PATH!\1_Low_End_Keyboard.reg"
+        set "FILE_NAME=1_Low_End_Keyboard.reg"
+    ) else if "!KB_CHOICE!"=="2" (
+        set "KB_FILE=!KEYBOARD_PATH!\2_Mid_Tier_Keyboard.reg"
+        set "FILE_NAME=2_Mid_Tier_Keyboard.reg"
+    ) else if "!KB_CHOICE!"=="3" (
+        set "KB_FILE=!KEYBOARD_PATH!\3_High_End_Keyboard.reg"
+        set "FILE_NAME=3_High_End_Keyboard.reg"
+    ) else if "!KB_CHOICE!"=="4" (
+        set "KB_FILE=!KEYBOARD_PATH!\4_Wooting_Fullsized_Keyboard.reg"
+        set "FILE_NAME=4_Wooting_Fullsized_Keyboard.reg"
+    ) else if "!KB_CHOICE!"=="5" (
+        set "KB_FILE=!KEYBOARD_PATH!\5_Wooting_Latest_Keyboard.reg"
+        set "FILE_NAME=5_Wooting_Latest_Keyboard.reg"
+    ) else if "!KB_CHOICE!"=="6" (
+        set "KB_FILE=!KEYBOARD_PATH!\6_8000hz_Keyboards.reg"
+        set "FILE_NAME=6_8000hz_Keyboards.reg"
+    ) else (
+        echo Invalid choice. Skipping keyboard tweak.
+        set "KB_FILE="
+    )
+    if defined KB_FILE (
+        if exist "!KB_FILE!" (
+            <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Applying: !FILE_NAME![0m" & echo.
+            echo reg-simulated-import "!KB_FILE!"
+            <nul set /p "=[32mSimulated success for !FILE_NAME![0m" & echo.
+            <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
+        ) else (
+            echo [!PROCESSED_FILES!/!TOTAL_FILES!] File not found: !FILE_NAME!
         )
     )
 )
