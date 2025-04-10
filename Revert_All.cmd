@@ -15,7 +15,7 @@ if %errorlevel% neq 0 (
 )
 
 rem Announce startup—keeps user in the loop
-echo Starting TerminalTanks Revert...
+echo Starting TerminalTanks CS2 Tweaks Revert...
 
 rem Set up logging—append to same log as Run_All.cmd for consistency
 set "LOG_FILE=!SUMMARY_DIR!\Optimization_Log.txt"
@@ -24,7 +24,7 @@ echo [%DATE% %TIME%] Starting revert application... >> "!LOG_FILE!"
 rem Main menu loop—choose to revert or exit
 :menu
 cls
-echo TerminalTanks Revert
+echo TerminalTanks CS2 Tweaks Revert
 echo Current Date: %DATE%
 echo.
 echo 1. Run revert CS2 tweaks
