@@ -92,6 +92,60 @@ For real tweaks, pick modes 1-3 as before. Logs now distinguish between "Success
 
 The `Revert_All.cmd` script has been overhauled to align with `Run_All.cmd`, adding menus, logging, and a simulation mode for safer testing. Key updates include:
 
+#### Registry Tweaks for Windows Optimization
+This repository includes a collection of `.reg` files to disable various Windows features and services, along with corresponding revert files to restore default settings. All tweaks are designed for Windows 11 (tested against 23H2 defaults as of April 2025) unless noted otherwise. Some revert files have been updated to align with true Windows defaults (e.g., removing policy keys rather than setting them to enabling values).
+
+**Files Added/Updated:**
+- **PowerShell Telemetry**:
+  - `Disable_PowerShellTelemetry.reg`: Disables PowerShell telemetry by setting `POWERSHELL_TELEMETRY_OPTOUT=1`.
+  - `Revert_PowerShellTelemetry.reg`: Removes the variable, restoring default telemetry behavior.
+- **Background Apps**:
+  - `Disable_BackgroundApps.reg`: Disables background apps globally (`GlobalUserDisabled=1`).
+  - `Revert_BackgroundApps.reg`: Restores default (`GlobalUserDisabled=0`).
+- **Fullscreen Optimizations**:
+  - `Disable_FullscreenOptimizations.reg`: Disables fullscreen optimizations for games.
+  - `Revert_FullscreenOptimizations.reg`: Updated to delete the key, matching a clean install’s default (previously set to `0`).
+- **Microsoft Copilot**:
+  - `Disable_MicrosoftCopilot.reg`: Disables Copilot via policy and hides the taskbar button.
+  - `Revert_MicrosoftCopilot.cmd`: Updated to delete policy keys (default state) and restore the button, with a `dism` command to reinstall the package.
+- **Services to Manual**:
+  - `Disable_ServicesToManual.reg`: Sets various services to Manual, Disabled, or AutomaticDelayedStart; trimmed to exclude redundant changes.
+  - `Revert_ServicesToManual.reg`: Restores corrected Windows 11 defaults (e.g., `BITS` to Manual, `WSearch` to AutomaticDelayedStart).
+- **Activity Feed**:
+  - `Disable_ActivityFeed.reg`: Disables Activity Feed syncing and publishing.
+  - `Revert_ActivityFeed.reg`: Updated to delete policy keys (default: no policy set).
+- **Consumer Features**:
+  - `Disable_ConsumerFeatures.reg`: Disables Windows consumer features (ads, tips).
+  - `Revert_ConsumerFeatures.reg`: New, deletes the policy key (default: features enabled).
+- **Game DVR**:
+  - `Disable_GameDVR.reg`: Disables Game DVR and related features.
+  - `Revert_GameDVR.reg`: Updated to correct `GameDVR_FSEBehavior=2`, `EFSEFeatureFlags=0`, and delete policy key.
+- **HomeGroup**:
+  - `Disable_HomeGroup.reg`: Removes HomeGroup services (obsolete in Win 11).
+  - `Revert_HomeGroup.reg`: Updated to set `Manual` (Win 10 pre-1803 default); not needed for Win 11.
+- **Storage Sense**:
+  - `Disable_StorageSense.reg`: Disables Storage Sense (`01=0`).
+  - `Revert_StorageSense.reg`: Restores default (`01=1`).
+- **WiFi Sense**:
+  - `Disable_WiFiSense.reg`: Disables WiFi Sense features (deprecated in Win 11).
+  - `Revert_WiFiSense.reg`: Updated to delete keys (default: features off, no keys).
+- **Notification Tray/Calendar**:
+  - `Disable_NotificationTrayCalendar.reg`: Disables notifications and calendar (advanced tweak).
+  - `Revert_NotificationTrayCalendar.reg`: Restores default notification behavior.
+- **Classic Right-Click Menu**:
+  - `Set_ClassicRightClickMenu.cmd`: Enables Windows 10-style context menu in Windows 11.
+  - `Revert_ClassicRightClickMenu.cmd`: Restores Windows 11 default context menu.
+- **Telemetry**:
+  - `Disable_Telemetry.reg`: Disables telemetry via registry and task states.
+  - `Disable_Telemetry.cmd`: Applies additional telemetry tweaks (boot, Defender, etc.).
+  - `Revert_Telemetry.reg`: Restores telemetry registry settings to defaults.
+  - `Revert_Telemetry.cmd`: Reverts script-based telemetry changes.
+
+**Notes:**
+- Run `.reg` files with admin rights. The Copilot revert `.cmd` also requires elevation for the `dism` command.
+- Revert files now reflect true Windows 11 defaults (e.g., key absence for policies, corrected service states).
+- HomeGroup and WiFi Sense tweaks are legacy; they’re no-ops in Windows 11 but included for older systems.
+
 - **Menu System**: New interactive menu with "Run revert tweaks" (1) and "Exit" (2) options.
 - **Execution Modes**: Added four modes: 1 (prompt for each file), 2 (execute all), 3 (skip all), and 4 (simulate all). Mode 4 simulates revert actions without modifying the registry.
 - **Logging**: All actions (file detection, application, success/failure) are logged to `Summary_%COMPUTERNAME%\Optimization_Log.txt` with timestamps, matching `Run_All.cmd`.
