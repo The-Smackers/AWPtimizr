@@ -1,6 +1,5 @@
-# TerminalTanks Windows (CS2) Tweaks
-
-Boost your Windows gaming rig with TerminalTanks—a collection of `.reg` and `.cmd` scripts to tweak CPU, game priorities, services, latency, network, graphics, and input settings for max performance. Built for CS2 (~600 FPS) and Topaz Video AI (16.7/15.7 FPS) on a Ryzen 7 7800X3D, ZOTAC RTX 4080 SUPER, 32GB RAM setup (driver 572.70, MSI MPG A1000G 1000W PSU).
+# TerminalTanks Windows CS2 Tweaks (The AWPtimizr)
+A command-line tool to apply and revert CS2 performance tweaks via registry and script files.
 
 ## Features
 - **CPU Tweaks**: AMD/Intel-specific optimizations.
@@ -16,15 +15,14 @@ Boost your Windows gaming rig with TerminalTanks—a collection of `.reg` and `.
 ## Usage
 1. **Clone/Download**: Grab the repo or download latest release and unzip if needed.
 2. **Run**: (Prompts for Admin privileges)
-   - `Run_All.cmd`: Apply tweaks with prompts.
-   - `Revert_All.cmd`: Undo all changes (auto-runs `Revert/` files).
-3. **Keyboard Selection**: Choose your keyboard type (1-6) in `Run_All`:
-   - 1: Low End e.g., Dell KB216, HP K150, Logitech K120, Microsoft Wired 200, Lenovo KU-0225
-   - 2: Mid Tier e.g., Logitech K400 Plus, Corsair K55, Razer Cynosa Lite, SteelSeries Apex 3, HyperX Alloy Core
-   - 3: High End e.g., Corsair K95 RGB, Razer BlackWidow Elite, Logitech G915, SteelSeries Apex Pro, Ducky Ones, Ducky Shines
-   - 4: Wooting 1000hz e.g., Wooting One, Wooting Two, Wooting 60HE, Wooting Two HE, Wooting Lekker Edition
-   - 5: Wooting 8000hz e.g., Wooting 60HE+, Wooting Two HE+, Wooting 80HE, Wooting 60HE+ Module, Wooting Custom
-   - 6: Other 8000hz e.g., Razer Huntsman V2, SteelSeries Apex Pro TKL HyperMagnetic, Corsair K100 RGB, ASUS ROG Falchion RX, Keychron Q8 Max
+   - `AWPtimizr.cmd`: Apply or Undo all changes/tweaks with prompts.
+3. **Keyboard Selection**: Choose your keyboard type (1-6) in `AWPtimizr`:
+   - 1: Low End e.g., Dell KB216, HP K150, Logitech K120, Microsoft Wired 200
+   - 2: Mid Tier e.g., Logitech K400 Plus, Corsair K55, Razer Cynosa Lite, SteelSeries Apex 3
+   - 3: High End e.g., Corsair K95 RGB, Razer BlackWidow Elite, Logitech G915, SteelSeries Apex Pro, Ducky Ones
+   - 4: Wooting 1000hz e.g., Wooting One, Wooting Two, Wooting 60HE
+   - 5: Wooting 8000hz e.g., Wooting 60HE+, Wooting Two HE+
+   - 6: Other 8000hz e.g., Razer Huntsman V2, SteelSeries Apex Pro TKL HyperMagnetic, Corsair K100 RGB
 4. **Reboot**: Required after applying tweaks or reverting.
 
 ## Folder Structure
@@ -44,7 +42,7 @@ Boost your Windows gaming rig with TerminalTanks—a collection of `.reg` and `.
 
 ## New Features (April 2025 Update)
 
-The `Run_All.cmd` script has been enhanced with the following features:
+The `AWPtimizr.cmd` script has been enhanced with the following features:
 
 - **Logging**: All actions (found files, execution, skips, failures) are logged to `Optimization_Log.txt` with timestamps.
 - **Backup Option**: Optionally create a registry backup (HKLM\SYSTEM and HKCU) before applying tweaks, saved to a `Backup` folder.
@@ -53,7 +51,7 @@ The `Run_All.cmd` script has been enhanced with the following features:
 - **Post-Execution Validation**: Checks if registry keys in `.reg` files exist before applying, with warnings logged if not found.
 - **Visual Feedback**: Displays a progress percentage (e.g., `[5/10] [50%]`) alongside file processing status.
 
-### Updates to Run_All.cmd (April 2025)
+### Updates to AWPtimizr.cmd (April 2025)
 
 - **Menu System**: Added a main menu with options to "Run application" (1) or "Exit" (2). After tweak application, the script returns to the menu instead of exiting, allowing multiple runs without restarting the script.
 - **Execution Modes**: Enhanced execution mode behavior:
@@ -69,12 +67,12 @@ The `Run_All.cmd` script has been enhanced with the following features:
 - **Logging**: Continues to log all actions to `Optimization_Log.txt` with timestamps.
 - **Backup Exclusion**: Files in the `Backup` folder are now ignored during tweak processing to prevent accidental execution of backup `.reg` files.
 - **User-Specific Summaries**: Logs (`Optimization_Log.txt`) and configuration files (`CPUType.txt`) are now saved in a `Summary_%COMPUTERNAME%` folder (e.g., `Summary_DESKTOP-ABC123`) in the main directory, making it easier to track tweaks per machine.
-- **Registry Feedback**: Enhanced `.reg` processing to always check and report registry key status ("Key exists" with values or "Key does not exist") before applying tweaks, consistent across `Run_All.cmd`.
-- **Simulated Run All**: Updated in `Run_All.cmd` registry feedback, always checking and reporting key status ("Key exists" with values or "Key does not exist") before simulating tweaks with `reg-simulated-import`. Retains selective `.cmd` simulation for `Latency_Tweaks.cmd`.
+- **Registry Feedback**: Enhanced `.reg` processing to always check and report registry key status ("Key exists" with values or "Key does not exist") before applying tweaks, consistent across `AWPtimizr.cmd`.
+- **Simulated Run All**: Updated in `AWPtimizr.cmd` registry feedback, always checking and reporting key status ("Key exists" with values or "Key does not exist") before simulating tweaks with `reg-simulated-import`. Retains selective `.cmd` simulation for `Latency_Tweaks.cmd`.
 
-### Combined Run_All.cmd (April 2025 Update)
+### Combined AWPtimizr.cmd (April 2025 Update)
 
-The `Run_All.cmd` script now combines the functionality of the previous `Simulated_Run_All.cmd` and `Run_All.cmd` into a single, streamlined tool. Key updates include:
+The `AWPtimizr.cmd` script now combines the functionality of the previous `Simulated_AWPtimizr.cmd` and `AWPtimizr.cmd` into a single, streamlined tool. Key updates include:
 
 - **Simulation Mode**: Added option 4 ("Simulate all") to the execution mode menu. This runs a dry simulation of all tweaks without applying changes to the registry—perfect for testing.
 - **Unified Workflow**: One script handles both real tweak application and simulation, toggling behavior with a `SIMULATE` flag. No need to juggle separate files anymore.
@@ -82,64 +80,22 @@ The `Run_All.cmd` script now combines the functionality of the previous `Simulat
 - **Error Handling**: Basic `errorlevel` checks for `reg import` ensure failures (like missing admin rights) are logged and reported.
 
 To use simulation mode:
-1. Run `Run_All.cmd`.
+1. Run `AWPtimizr.cmd`.
 2. Select `1` (Run tweaks), `n` (skip backup), then `4` (simulate all).
 3. Check `Summary_%COMPUTERNAME%\Optimization_Log.txt` for "Simulated success" entries.
 
 For real tweaks, pick modes 1-3 as before. Logs now distinguish between "Success" (real) and "Simulated success" (dry run).
 
-### Enhanced Revert_All.cmd (April 2025 Update)
+### Enhanced AWPtimizr.cmd (April 2025 Update)
 
-The `Revert_All.cmd` script has been overhauled to align with `Run_All.cmd`, adding menus, logging, and a simulation mode for safer testing. Key updates include:
+The `AWPtimizr.cmd` script has been overhauled to align with `AWPtimizr.cmd`, adding menus, logging, and a simulation mode for safer testing. Key updates include:
 
 #### Registry Tweaks for Windows Optimization
 This repository includes a collection of `.reg` files to disable various Windows features and services, along with corresponding revert files to restore default settings. All tweaks are designed for Windows 11 (tested against 23H2 defaults as of April 2025) unless noted otherwise. Some revert files have been updated to align with true Windows defaults (e.g., removing policy keys rather than setting them to enabling values).
 
-**Files Added/Updated:**
-- **PowerShell Telemetry**:
-  - `Disable_PowerShellTelemetry.reg`: Disables PowerShell telemetry by setting `POWERSHELL_TELEMETRY_OPTOUT=1`.
-  - `Revert_PowerShellTelemetry.reg`: Removes the variable, restoring default telemetry behavior.
-- **Background Apps**:
-  - `Disable_BackgroundApps.reg`: Disables background apps globally (`GlobalUserDisabled=1`).
-  - `Revert_BackgroundApps.reg`: Restores default (`GlobalUserDisabled=0`).
-- **Fullscreen Optimizations**:
-  - `Disable_FullscreenOptimizations.reg`: Disables fullscreen optimizations for games.
-  - `Revert_FullscreenOptimizations.reg`: Updated to delete the key, matching a clean install’s default (previously set to `0`).
-- **Microsoft Copilot**:
-  - `Disable_MicrosoftCopilot.reg`: Disables Copilot via policy and hides the taskbar button.
-  - `Revert_MicrosoftCopilot.cmd`: Updated to delete policy keys (default state) and restore the button, with a `dism` command to reinstall the package.
-- **Services to Manual**:
-  - `Disable_ServicesToManual.reg`: Sets various services to Manual, Disabled, or AutomaticDelayedStart; trimmed to exclude redundant changes.
-  - `Revert_ServicesToManual.reg`: Restores corrected Windows 11 defaults (e.g., `BITS` to Manual, `WSearch` to AutomaticDelayedStart).
-- **Activity Feed**:
-  - `Disable_ActivityFeed.reg`: Disables Activity Feed syncing and publishing.
-  - `Revert_ActivityFeed.reg`: Updated to delete policy keys (default: no policy set).
-- **Consumer Features**:
-  - `Disable_ConsumerFeatures.reg`: Disables Windows consumer features (ads, tips).
-  - `Revert_ConsumerFeatures.reg`: New, deletes the policy key (default: features enabled).
-- **Game DVR**:
-  - `Disable_GameDVR.reg`: Disables Game DVR and related features.
-  - `Revert_GameDVR.reg`: Updated to correct `GameDVR_FSEBehavior=2`, `EFSEFeatureFlags=0`, and delete policy key.
-- **HomeGroup**:
-  - `Disable_HomeGroup.reg`: Removes HomeGroup services (obsolete in Win 11).
-  - `Revert_HomeGroup.reg`: Updated to set `Manual` (Win 10 pre-1803 default); not needed for Win 11.
-- **Storage Sense**:
-  - `Disable_StorageSense.reg`: Disables Storage Sense (`01=0`).
-  - `Revert_StorageSense.reg`: Restores default (`01=1`).
-- **WiFi Sense**:
-  - `Disable_WiFiSense.reg`: Disables WiFi Sense features (deprecated in Win 11).
-  - `Revert_WiFiSense.reg`: Updated to delete keys (default: features off, no keys).
-- **Notification Tray/Calendar**:
-  - `Disable_NotificationTrayCalendar.reg`: Disables notifications and calendar (advanced tweak).
-  - `Revert_NotificationTrayCalendar.reg`: Restores default notification behavior.
-- **Classic Right-Click Menu**:
-  - `Set_ClassicRightClickMenu.cmd`: Enables Windows 10-style context menu in Windows 11.
-  - `Revert_ClassicRightClickMenu.cmd`: Restores Windows 11 default context menu.
-- **Telemetry**:
-  - `Disable_Telemetry.reg`: Disables telemetry via registry and task states.
-  - `Disable_Telemetry.cmd`: Applies additional telemetry tweaks (boot, Defender, etc.).
-  - `Revert_Telemetry.reg`: Restores telemetry registry settings to defaults.
-  - `Revert_Telemetry.cmd`: Reverts script-based telemetry changes.
+### April 10, 2025
+- Refactored registry backup into a reusable subroutine for consistency and maintainability.
+- Improved completion messages to accurately reflect whether tweaks/reverts were applied, simulated, or skipped, avoiding misleading "Restart recommended" prompts when all files are skipped.
 
 **Notes:**
 - Run `.reg` files with admin rights. The Copilot revert `.cmd` also requires elevation for the `dism` command.
@@ -148,12 +104,12 @@ This repository includes a collection of `.reg` files to disable various Windows
 
 - **Menu System**: New interactive menu with "Run revert tweaks" (1) and "Exit" (2) options.
 - **Execution Modes**: Added four modes: 1 (prompt for each file), 2 (execute all), 3 (skip all), and 4 (simulate all). Mode 4 simulates revert actions without modifying the registry.
-- **Logging**: All actions (file detection, application, success/failure) are logged to `Summary_%COMPUTERNAME%\Optimization_Log.txt` with timestamps, matching `Run_All.cmd`.
+- **Logging**: All actions (file detection, application, success/failure) are logged to `Summary_%COMPUTERNAME%\Optimization_Log.txt` with timestamps, matching `AWPtimizr.cmd`.
 - **Simulation Mode**: Use mode 4 to preview revert tweaks without changes—outputs `reg-simulated-import` or `call-simulated` instead of real commands.
 - **Detailed Comments**: Added specific, meaningful comments explaining each section (e.g., CPU detection, file processing) and logic (e.g., registry key checks).
 
 To test simulation mode:
-1. Run `Revert_All.cmd`.
+1. Run `AWPtimizr.cmd`.
 2. Select `1` (Run revert tweaks), then `4` (simulate all).
 3. Check the log for "Simulated success" entries—no system changes applied.
 
@@ -163,7 +119,7 @@ Run the script from `D:\Videos\apps\Windows_Optimizations` with admin privileges
 
 ### Usage Notes
 - Run scripts with administrative privileges (UAC prompt will appear if needed).
-- The user prompt (`Preview (p), Execute (e), or Skip (s)?`) is now in bold yellow for better visibility.
+- The user prompt (`Preview (p), Execute (e), or Skip (s)?`).
 - Check `Optimization_Log.txt` after execution for a detailed run history.
 - Backups are timestamped (e.g., `HKLM_SYSTEM_20250408.reg`) and stored in the `Backup` subfolder.
 
@@ -173,7 +129,8 @@ Choose execution mode:
 1: Prompt for each file (default)
 2: Execute all automatically
 3: Skip all automatically
-Enter choice (1-3): 1
+4: Simulate all (no changes applied)
+Enter choice (1-4):
 
 [1/10] [10%] Found: Disable_Telemetry.reg
 Preview (p), Execute (e), or Skip (s)? e
