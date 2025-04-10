@@ -1,6 +1,6 @@
 # TerminalTanks Windows Optimizations
 
-Boost your Windows 11 gaming rig with TerminalTanks—a collection of `.reg` and `.cmd` scripts to tweak CPU, game priorities, services, latency, network, graphics, and input settings for max performance. Built for CS2 (~300 FPS) and Topaz Video AI (16.7/15.7 FPS) on a Ryzen 7 7800X3D, ZOTAC RTX 4080 SUPER, 32GB RAM setup (driver 572.70, MSI MPG A1000G 1000W PSU).
+Boost your Windows 11 gaming rig with TerminalTanks—a collection of `.reg` and `.cmd` scripts to tweak CPU, game priorities, services, latency, network, graphics, and input settings for max performance. Built for CS2 (~600 FPS) and Topaz Video AI (16.7/15.7 FPS) on a Ryzen 7 7800X3D, ZOTAC RTX 4080 SUPER, 32GB RAM setup (driver 572.70, MSI MPG A1000G 1000W PSU).
 
 ## Features
 - **CPU Tweaks**: AMD/Intel-specific optimizations.
@@ -145,4 +145,4 @@ Need for this repo grew from my TerminalTanks setup; gaming, coding, plants, and
 ## Contribute
 Bugs? PRs welcome—fork it, tweak it, share it.  
 **License**: GNU  
-**More**: Catch TerminalTanks on YouTube—[youtube.com/@TerminalTanks](https://www.youtube.com/@TerminalTanks).
+**More**: Catch TerminalTanks on YouTube—[youtube.com/@TerminalTanks](https://www.youtube.com/@TerminalTanks). TerminalTanks(Pb/pdq/idk) is a member of The Smackers.
