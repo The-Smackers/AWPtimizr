@@ -39,9 +39,9 @@ goto menu
 :simulate
 rem Backup option
 set "BACKUP_PATH=%~dp0Backup"
-mkdir "!BACKUP_PATH!" 2>nul
 set /p "BACKUP=Create registry backup before simulation? (y/n): "
 if /i "!BACKUP!"=="y" (
+    mkdir "!BACKUP_PATH!" 2>nul
     echo Creating backup...
     echo [%DATE% %TIME%] Creating registry backup... >> "!LOG_FILE!"
     set "BACKUP_HKLM=!BACKUP_PATH!\HKLM_SYSTEM_%DATE:~-4%%DATE:~4,2%%DATE:~7,2%.reg"
@@ -219,20 +219,23 @@ for /d %%D in ("%~dp0*") do (
                     if /i "%%~xF"==".reg" (
                         echo Checking registry applicability...
                         for /f "delims=" %%K in ('type "%%F" ^| findstr /i "HKEY"') do (
-                            reg query "%%K" >nul 2>&1
+                            set "KEY_PATH=%%K"
+                            set "KEY_PATH=!KEY_PATH:[=!"
+                            set "KEY_PATH=!KEY_PATH:]=!"
+                            echo Debug: Querying !KEY_PATH! >> "!LOG_FILE!"
+                            reg query "!KEY_PATH!" >nul 2>&1
                             if !errorlevel! equ 0 (
-                                echo Key exists: %%K
-                                echo [%DATE% %TIME%] Key exists: %%K for !FILE_NAME! >> "!LOG_FILE!"
-                                rem Show key values
-                                for /f "tokens=1,2,3" %%V in ('reg query "%%K"') do (
-                                    if "%%V"=="!%%V!" if not "%%W"=="" (
-                                        echo   Value: %%V = %%W
-                                        echo [%DATE% %TIME%]   Value: %%V = %%W for !FILE_NAME! >> "!LOG_FILE!"
+                                echo Key: !KEY_PATH!
+                                echo [%DATE% %TIME%] Key exists: !KEY_PATH! for !FILE_NAME! >> "!LOG_FILE!"
+                                for /f "tokens=1,2,*" %%V in ('reg query "!KEY_PATH!" 2^>nul') do (
+                                    if "%%W" NEQ "" (
+                                        echo Value: %%V = %%W %%X
+                                        echo [%DATE% %TIME%] Value: %%V = %%W %%X for !FILE_NAME! >> "!LOG_FILE!"
                                     )
                                 )
                             ) else (
-                                echo Key does not exist: %%K
-                                echo [%DATE% %TIME%] Key does not exist: %%K for !FILE_NAME! >> "!LOG_FILE!"
+                                echo Key does not exist: !KEY_PATH!
+                                echo [%DATE% %TIME%] Key does not exist: !KEY_PATH! for !FILE_NAME! >> "!LOG_FILE!"
                             )
                         )
                         echo reg-simulated-import "%%F"
@@ -305,20 +308,23 @@ if exist "!CPU_PATH!\" (
                 if /i "%%~xF"==".reg" (
                     echo Checking registry applicability...
                     for /f "delims=" %%K in ('type "%%F" ^| findstr /i "HKEY"') do (
-                        reg query "%%K" >nul 2>&1
+                        set "KEY_PATH=%%K"
+                        set "KEY_PATH=!KEY_PATH:[=!"
+                        set "KEY_PATH=!KEY_PATH:]=!"
+                        echo Debug: Querying !KEY_PATH! >> "!LOG_FILE!"
+                        reg query "!KEY_PATH!" >nul 2>&1
                         if !errorlevel! equ 0 (
-                            echo Key exists: %%K
-                            echo [%DATE% %TIME%] Key exists: %%K for !FILE_NAME! >> "!LOG_FILE!"
-                            rem Show key values
-                            for /f "tokens=1,2,3" %%V in ('reg query "%%K"') do (
-                                if "%%V"=="!%%V!" if not "%%W"=="" (
-                                    echo   Value: %%V = %%W
-                                    echo [%DATE% %TIME%]   Value: %%V = %%W for !FILE_NAME! >> "!LOG_FILE!"
+                            echo Key: !KEY_PATH!
+                            echo [%DATE% %TIME%] Key exists: !KEY_PATH! for !FILE_NAME! >> "!LOG_FILE!"
+                            for /f "tokens=1,2,*" %%V in ('reg query "!KEY_PATH!" 2^>nul') do (
+                                if "%%W" NEQ "" (
+                                    echo Value: %%V = %%W %%X
+                                    echo [%DATE% %TIME%] Value: %%V = %%W %%X for !FILE_NAME! >> "!LOG_FILE!"
                                 )
                             )
                         ) else (
-                            echo Key does not exist: %%K
-                            echo [%DATE% %TIME%] Key does not exist: %%K for !FILE_NAME! >> "!LOG_FILE!"
+                            echo Key does not exist: !KEY_PATH!
+                            echo [%DATE% %TIME%] Key does not exist: !KEY_PATH! for !FILE_NAME! >> "!LOG_FILE!"
                         )
                     )
                     echo reg-simulated-import "%%F"
@@ -390,20 +396,23 @@ if exist "!MOUSE_PATH!\" (
                 if /i "%%~xF"==".reg" (
                     echo Checking registry applicability...
                     for /f "delims=" %%K in ('type "%%F" ^| findstr /i "HKEY"') do (
-                        reg query "%%K" >nul 2>&1
+                        set "KEY_PATH=%%K"
+                        set "KEY_PATH=!KEY_PATH:[=!"
+                        set "KEY_PATH=!KEY_PATH:]=!"
+                        echo Debug: Querying !KEY_PATH! >> "!LOG_FILE!"
+                        reg query "!KEY_PATH!" >nul 2>&1
                         if !errorlevel! equ 0 (
-                            echo Key exists: %%K
-                            echo [%DATE% %TIME%] Key exists: %%K for !FILE_NAME! >> "!LOG_FILE!"
-                            rem Show key values
-                            for /f "tokens=1,2,3" %%V in ('reg query "%%K"') do (
-                                if "%%V"=="!%%V!" if not "%%W"=="" (
-                                    echo   Value: %%V = %%W
-                                    echo [%DATE% %TIME%]   Value: %%V = %%W for !FILE_NAME! >> "!LOG_FILE!"
+                            echo Key: !KEY_PATH!
+                            echo [%DATE% %TIME%] Key exists: !KEY_PATH! for !FILE_NAME! >> "!LOG_FILE!"
+                            for /f "tokens=1,2,*" %%V in ('reg query "!KEY_PATH!" 2^>nul') do (
+                                if "%%W" NEQ "" (
+                                    echo Value: %%V = %%W %%X
+                                    echo [%DATE% %TIME%] Value: %%V = %%W %%X for !FILE_NAME! >> "!LOG_FILE!"
                                 )
                             )
                         ) else (
-                            echo Key does not exist: %%K
-                            echo [%DATE% %TIME%] Key does not exist: %%K for !FILE_NAME! >> "!LOG_FILE!"
+                            echo Key does not exist: !KEY_PATH!
+                            echo [%DATE% %TIME%] Key does not exist: !KEY_PATH! for !FILE_NAME! >> "!LOG_FILE!"
                         )
                     )
                     echo reg-simulated-import "%%F"
@@ -523,20 +532,23 @@ if exist "!KEYBOARD_PATH!\" (
                     echo [%DATE% %TIME%] Applying: !FILE_NAME! >> "!LOG_FILE!"
                     echo Checking registry applicability...
                     for /f "delims=" %%K in ('type "!KB_FILE!" ^| findstr /i "HKEY"') do (
-                        reg query "%%K" >nul 2>&1
+                        set "KEY_PATH=%%K"
+                        set "KEY_PATH=!KEY_PATH:[=!"
+                        set "KEY_PATH=!KEY_PATH:]=!"
+                        echo Debug: Querying !KEY_PATH! >> "!LOG_FILE!"
+                        reg query "!KEY_PATH!" >nul 2>&1
                         if !errorlevel! equ 0 (
-                            echo Key exists: %%K
-                            echo [%DATE% %TIME%] Key exists: %%K for !FILE_NAME! >> "!LOG_FILE!"
-                            rem Show key values
-                            for /f "tokens=1,2,3" %%V in ('reg query "%%K"') do (
-                                if "%%V"=="!%%V!" if not "%%W"=="" (
-                                    echo   Value: %%V = %%W
-                                    echo [%DATE% %TIME%]   Value: %%V = %%W for !FILE_NAME! >> "!LOG_FILE!"
+                            echo Key: !KEY_PATH!
+                            echo [%DATE% %TIME%] Key exists: !KEY_PATH! for !FILE_NAME! >> "!LOG_FILE!"
+                            for /f "tokens=1,2,*" %%V in ('reg query "!KEY_PATH!" 2^>nul') do (
+                                if "%%W" NEQ "" (
+                                    echo Value: %%V = %%W %%X
+                                    echo [%DATE% %TIME%] Value: %%V = %%W %%X for !FILE_NAME! >> "!LOG_FILE!"
                                 )
                             )
                         ) else (
-                            echo Key does not exist: %%K
-                            echo [%DATE% %TIME%] Key does not exist: %%K for !FILE_NAME! >> "!LOG_FILE!"
+                            echo Key does not exist: !KEY_PATH!
+                            echo [%DATE% %TIME%] Key does not exist: !KEY_PATH! for !FILE_NAME! >> "!LOG_FILE!"
                         )
                     )
                     echo reg-simulated-import "!KB_FILE!"
@@ -555,7 +567,7 @@ if exist "!KEYBOARD_PATH!\" (
     )
 )
 
-echo Simulation of CS2 Tweaks complete! No changes applied to registry.
+echo Simulation of CS2 complete! No changes applied to registry.
 echo [%DATE% %TIME%] Simulation complete! >> "!LOG_FILE!"
 timeout /t 2 >nul
 pause
