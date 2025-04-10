@@ -10,17 +10,15 @@ Boost your Windows 11 gaming rig with TerminalTanks—a collection of `.reg` and
 - **Network**: Firewall rules for CS2.
 - **Graphics**: High-performance settings for CS2.
 - **Input**: Mouse precision fixes and keyboard polling rate tweaks (Low End to 8000hz).
-- **Revert Options**: Undo all changes with `Revert_All.cmd`.
-- **Simulation Mode**: Test tweaks without applying (`Simulate_Run_All.cmd`).
+- **Revert Options**: Undo all or some changes.
+- **Simulation Mode**: Test tweaks without applying.
 
 ## Usage
 1. **Clone/Download**: Grab the repo to `D:\Videos\apps\Windows_Optimizations\`.
 2. **Run as Admin**:
    - `Run_All.cmd`: Apply tweaks with prompts (keyboard menu for `4_Input\Keyboard`).
-   - `Simulate_Run_All.cmd`: Preview tweaks (simulates `.reg`, mocks `Latency_Tweaks.cmd`).
    - `Revert_All.cmd`: Undo all changes (auto-runs `Revert/` files).
-   - `Simulate_Revert_All.cmd`: Preview revert process.
-3. **Keyboard Selection**: Choose your keyboard type (1-6) in `Run_All`/`Simulate_Run_All`:
+3. **Keyboard Selection**: Choose your keyboard type (1-6) in `Run_All`:
    - 1: Low End
    - 2: Mid Tier
    - 3: High End
@@ -42,18 +40,17 @@ Boost your Windows 11 gaming rig with TerminalTanks—a collection of `.reg` and
 
 ## Registry Key Echo
 - `Run_All.cmd`: Shows "Prior" and "After" values for all `.reg` keys affected—check before/after states.
-- `Simulate_Run_All.cmd`: Simulates `.reg` changes, echoes "Prior" values only.
 
 ## Prerequisites
 - Windows 11, admin rights.
 - Backup your registry (optional but recommended).
 
 ## Commit History
-- Latest: "Fixed keyboard menu, added registry key echo in Run_All/Simulate_Run_All" - April 08, 2025.
+- Latest: "Fixed keyboard menu, added registry key echo in Run_All" - April 08, 2025.
 
 ## New Features (April 2025 Update)
 
-The `Simulated_Run_All.cmd` and `Run_All.cmd` scripts have been enhanced with the following features:
+The `Run_All.cmd` script has been enhanced with the following features:
 
 - **Logging**: All actions (found files, execution, skips, failures) are logged to `Optimization_Log.txt` with timestamps.
 - **Backup Option**: Optionally create a registry backup (HKLM\SYSTEM and HKCU) before applying tweaks, saved to a `Backup` folder.
@@ -78,8 +75,8 @@ The `Simulated_Run_All.cmd` and `Run_All.cmd` scripts have been enhanced with th
 - **Logging**: Continues to log all actions to `Optimization_Log.txt` with timestamps.
 - **Backup Exclusion**: Files in the `Backup` folder are now ignored during tweak processing to prevent accidental execution of backup `.reg` files.
 - **User-Specific Summaries**: Logs (`Optimization_Log.txt`) and configuration files (`CPUType.txt`) are now saved in a `Summary_%COMPUTERNAME%` folder (e.g., `Summary_DESKTOP-ABC123`) in the main directory, making it easier to track tweaks per machine.
-- **Registry Feedback**: Enhanced `.reg` processing to always check and report registry key status ("Key exists" with values or "Key does not exist") before applying tweaks, consistent across `Run_All.cmd` and `Simulated_Run_All.cmd`.
-- **Simulated_Run_All.cmd**: Updated to match `Run_All.cmd` registry feedback, always checking and reporting key status ("Key exists" with values or "Key does not exist") before simulating tweaks with `reg-simulated-import`. Retains selective `.cmd` simulation for `Latency_Tweaks.cmd`.
+- **Registry Feedback**: Enhanced `.reg` processing to always check and report registry key status ("Key exists" with values or "Key does not exist") before applying tweaks, consistent across `Run_All.cmd`.
+- **Simulated Run All**: Updated in `Run_All.cmd` registry feedback, always checking and reporting key status ("Key exists" with values or "Key does not exist") before simulating tweaks with `reg-simulated-import`. Retains selective `.cmd` simulation for `Latency_Tweaks.cmd`.
 
 ### Combined Run_All.cmd (April 2025 Update)
 
@@ -96,6 +93,23 @@ To use simulation mode:
 3. Check `Summary_%COMPUTERNAME%\Optimization_Log.txt` for "Simulated success" entries.
 
 For real tweaks, pick modes 1-3 as before. Logs now distinguish between "Success" (real) and "Simulated success" (dry run).
+
+### Enhanced Revert_All.cmd (April 2025 Update)
+
+The `Revert_All.cmd` script has been overhauled to align with `Run_All.cmd`, adding menus, logging, and a simulation mode for safer testing. Key updates include:
+
+- **Menu System**: New interactive menu with "Run revert tweaks" (1) and "Exit" (2) options.
+- **Execution Modes**: Added four modes: 1 (prompt for each file), 2 (execute all), 3 (skip all), and 4 (simulate all). Mode 4 simulates revert actions without modifying the registry.
+- **Logging**: All actions (file detection, application, success/failure) are logged to `Summary_%COMPUTERNAME%\Optimization_Log.txt` with timestamps, matching `Run_All.cmd`.
+- **Simulation Mode**: Use mode 4 to preview revert tweaks without changes—outputs `reg-simulated-import` or `call-simulated` instead of real commands.
+- **Detailed Comments**: Added specific, meaningful comments explaining each section (e.g., CPU detection, file processing) and logic (e.g., registry key checks).
+
+To test simulation mode:
+1. Run `Revert_All.cmd`.
+2. Select `1` (Run revert tweaks), then `4` (simulate all).
+3. Check the log for "Simulated success" entries—no system changes applied.
+
+For real reverts, use modes 1-3. Logs distinguish between "Success" (real) and "Simulated success" (dry run), with a reboot recommended after real runs.
 
 Run the script from `D:\Videos\apps\Windows_Optimizations` with admin privileges to apply tweaks. Ensure all referenced `.reg` and `.cmd` files exist in their respective subfolders for full functionality.
 
