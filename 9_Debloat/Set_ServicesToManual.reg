@@ -1,0 +1,67 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AJRouter]
+"Start"=dword:00000004  ; Disabled (was Manual)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AppVClient]
+"Start"=dword:00000004  ; Disabled (was Disabled, but included for completeness)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\AssignedAccessManagerSvc]
+"Start"=dword:00000004  ; Disabled (was Manual)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\BITS]
+"Start"=dword:00000003 ; Manual (was Manual)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\CDPSvc]
+"Start"=dword:00000003  ; Manual (was Automatic)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DiagTrack]
+"Start"=dword:00000004  ; Disabled (was Automatic)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DialogBlockingService]
+"Start"=dword:00000004  ; Disabled (was Disabled, but included for completeness)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DoSvc]
+"Start"=dword:00000002
+"DelayedAutostart"=dword:00000001  ; AutomaticDelayedStart (was Automatic)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MapsBroker]
+"Start"=dword:00000002
+"DelayedAutostart"=dword:00000001  ; AutomaticDelayedStart (was AutomaticDelayedStart, adjusted)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MsKeyboardFilter]
+"Start"=dword:00000003  ; Manual (was Disabled)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\NetTcpPortSharing]
+"Start"=dword:00000004  ; Disabled (was Disabled, but included for completeness)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\PcaSvc]
+"Start"=dword:00000003  ; Manual (was Manual, adjusted from incorrect Automatic)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RemoteAccess]
+"Start"=dword:00000004  ; Disabled (was Disabled, but included for completeness)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RemoteRegistry]
+"Start"=dword:00000004  ; Disabled (was Disabled, but included for completeness)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\StateRepository]
+"Start"=dword:00000003  ; Manual (was Automatic)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\StorSvc]
+"Start"=dword:00000003  ; Manual (was Automatic)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\TextInputManagementService]
+"Start"=dword:00000003  ; Manual (was Automatic)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\UevAgentService]
+"Start"=dword:00000004  ; Disabled (was Disabled, but included for completeness)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\UsoSvc]
+"Start"=dword:00000003  ; Manual (was Automatic)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WSearch]
+"Start"=dword:00000002
+"DelayedAutostart"=dword:00000001  ; AutomaticDelayedStart (was AutomaticDelayedStart, adjusted)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WpnService]
+"Start"=dword:00000003  ; Manual (was Automatic)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\cbdhsvc_*]
+"Start"=dword:00000003  ; Manual (was Automatic)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\edgeupdate]
+"Start"=dword:00000003  ; Manual (was Automatic)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\shpamsvc]
+"Start"=dword:00000004  ; Disabled (was Disabled, but included for completeness)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\sppsvc]
+"Start"=dword:00000002
+"DelayedAutostart"=dword:00000001  ; AutomaticDelayedStart (was Automatic)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ssh-agent]
+"Start"=dword:00000004  ; Disabled (was Disabled, but included for completeness)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\tzautoupdate]
+"Start"=dword:00000004  ; Disabled (was Disabled, but included for completeness)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\uhssvc]
+"Start"=dword:00000004  ; Disabled (was Disabled, but included for completeness)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\vm3dservice]
+"Start"=dword:00000003  ; Manual (was Automatic)
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\wscsvc]
+"Start"=dword:00000002
+"DelayedAutostart"=dword:00000001  ; AutomaticDelayedStart (was Automatic)

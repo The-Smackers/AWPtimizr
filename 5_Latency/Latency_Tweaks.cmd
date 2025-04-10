@@ -12,5 +12,5 @@ ECHO Disable Synthetic Timers
 bcdedit /set useplatformtick yes >nul 2>&1
 if %errorlevel% equ 0 (echo The operation completed successfully.) else (echo Failed to set synthetic timers.)
 
-ECHO Done Reboot required.
+ECHO Reboot required for it to take effect.
 pause
