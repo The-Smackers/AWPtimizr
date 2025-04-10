@@ -143,7 +143,7 @@ Tweaks based on this video: [Make Your CS2 RUN BETTER - (packet loss, latency, c
 Need for this repo grew from my TerminalTanks setup; gaming, coding, plants, and planted tanks. Pair Win 11 with Powertoys running FancyZones for window snaps and Workspaces for one-click launches (MPC-HC auto-play baked in). For CS2 enjoyers, voyeurs, fish nerds and frame chasers.
 
 ## Contribute
-Bugs? PRs welcome—fork it, tweak it, share it.  
-**License**: GNU  
-**More**: Catch TerminalTanks on YouTube—[youtube.com/@TerminalTanks](https://www.youtube.com/@TerminalTanks).
-**Who am I**: TerminalTanks(Pb/pdq/idk) is a member of The Smackers.
+- **Bugs** PRs welcome—fork it, tweak it, share it.  
+- **License**: GNU  
+- **More**: Catch TerminalTanks on YouTube—[youtube.com/@TerminalTanks](https://www.youtube.com/@TerminalTanks).
+- **Who**: TerminalTanks(Pb/pdq/idk) is a member of The Smackers.
