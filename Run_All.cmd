@@ -527,12 +527,12 @@ if exist "!KEYBOARD_PATH!\" (
         echo [!PROCESSED_FILES!/!TOTAL_FILES!] [!PERCENT!%%] Selecting keyboard tweak...
         echo [%DATE% %TIME%] [!PROCESSED_FILES!/!TOTAL_FILES!] Selecting keyboard tweak... >> "!LOG_FILE!"
         echo What kind of Keyboard do you have?
-        echo 1: Low End
-        echo 2: Mid Tier
-        echo 3: High End
-        echo 4: Wooting 1000hz
-        echo 5: Wooting 8000hz
-        echo 6: Other 8000hz
+        echo 1: Low End e.g., Dell KB216, HP K150, Logitech K120, Microsoft Wired 200, Lenovo KU-0225
+        echo 2: Mid Tier e.g., Logitech K400 Plus, Corsair K55, Razer Cynosa Lite, SteelSeries Apex 3, HyperX Alloy Core
+        echo 3: High End e.g., Corsair K95 RGB, Razer BlackWidow Elite, Logitech G915, SteelSeries Apex Pro, Ducky Ones, Ducky Shines
+        echo 4: Wooting 1000hz e.g., Wooting One, Wooting Two, Wooting 60HE, Wooting Two HE, Wooting Lekker Edition
+        echo 5: Wooting 8000hz e.g., Wooting 60HE+, Wooting Two HE+, Wooting 80HE, Wooting 60HE+ Module, Wooting Custom
+        echo 6: Other 8000hz e.g., Razer Huntsman V2, SteelSeries Apex Pro TKL HyperMagnetic, Corsair K100 RGB, ASUS ROG Falchion RX, Keychron Q8 Max
         :keyboard_prompt
         set "KB_CHOICE="
         set /p "KB_CHOICE=Enter choice (1-6): "

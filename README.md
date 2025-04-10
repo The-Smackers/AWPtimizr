@@ -14,17 +14,17 @@ Boost your Windows 11 gaming rig with TerminalTanks—a collection of `.reg` and
 - **Simulation Mode**: Test tweaks without applying.
 
 ## Usage
-1. **Clone/Download**: Grab the repo to `D:\Videos\apps\Windows_Optimizations\`.
-2. **Run as Admin**:
-   - `Run_All.cmd`: Apply tweaks with prompts (keyboard menu for `4_Input\Keyboard`).
+1. **Clone/Download**: Grab the repo and unzip if needed to `\Windows_Optimizations\`.
+2. **Run**: (Prompts for Admin privileges)
+   - `Run_All.cmd`: Apply tweaks with prompts.
    - `Revert_All.cmd`: Undo all changes (auto-runs `Revert/` files).
 3. **Keyboard Selection**: Choose your keyboard type (1-6) in `Run_All`:
-   - 1: Low End
-   - 2: Mid Tier
-   - 3: High End
-   - 4: Wooting 1000hz
-   - 5: Wooting 8000hz
-   - 6: Other 8000hz
+   - 1: Low End e.g., Dell KB216, HP K150, Logitech K120, Microsoft Wired 200, Lenovo KU-0225
+   - 2: Mid Tier e.g., Logitech K400 Plus, Corsair K55, Razer Cynosa Lite, SteelSeries Apex 3, HyperX Alloy Core
+   - 3: High End e.g., Corsair K95 RGB, Razer BlackWidow Elite, Logitech G915, SteelSeries Apex Pro, Ducky Ones, Ducky Shines
+   - 4: Wooting 1000hz e.g., Wooting One, Wooting Two, Wooting 60HE, Wooting Two HE, Wooting Lekker Edition
+   - 5: Wooting 8000hz e.g., Wooting 60HE+, Wooting Two HE+, Wooting 80HE, Wooting 60HE+ Module, Wooting Custom
+   - 6: Other 8000hz e.g., Razer Huntsman V2, SteelSeries Apex Pro TKL HyperMagnetic, Corsair K100 RGB, ASUS ROG Falchion RX, Keychron Q8 Max
 4. **Reboot**: Required after applying tweaks or reverting.
 
 ## Folder Structure
