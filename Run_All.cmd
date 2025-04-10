@@ -10,7 +10,7 @@ rem Check for admin rights; if not elevated, relaunch with UAC prompt
 net session >nul 2>&1
 if %errorlevel% neq 0 (
     echo Requesting admin rights...
-    powershell -Command "Start-Process cmd -ArgumentList '/k cd /d %~dp0 && %~nx0' -Verb RunAs"
+    powershell -Command "Start-Process cmd -ArgumentList '/c cd /d %~dp0 && %~nx0' -Verb RunAs"
     exit /b
 )
 
@@ -33,7 +33,7 @@ echo.
 set "MENU_CHOICE="
 set /p MENU_CHOICE="Enter choice (1-2): "
 if "!MENU_CHOICE!"=="1" goto tweaks
-if "!MENU_CHOICE!"=="2" exit /b
+if "!MENU_CHOICE!"=="2" exit
 echo Invalid choice. Please try again.
 timeout /t 2 >nul
 goto menu
