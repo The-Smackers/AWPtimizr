@@ -1,6 +1,6 @@
-# TerminalTanks Windows Optimizations
+# TerminalTanks Windows (CS2) Tweaks
 
-Boost your Windows 11 gaming rig with TerminalTanks—a collection of `.reg` and `.cmd` scripts to tweak CPU, game priorities, services, latency, network, graphics, and input settings for max performance. Built for CS2 (~600 FPS) and Topaz Video AI (16.7/15.7 FPS) on a Ryzen 7 7800X3D, ZOTAC RTX 4080 SUPER, 32GB RAM setup (driver 572.70, MSI MPG A1000G 1000W PSU).
+Boost your Windows gaming rig with TerminalTanks—a collection of `.reg` and `.cmd` scripts to tweak CPU, game priorities, services, latency, network, graphics, and input settings for max performance. Built for CS2 (~600 FPS) and Topaz Video AI (16.7/15.7 FPS) on a Ryzen 7 7800X3D, ZOTAC RTX 4080 SUPER, 32GB RAM setup (driver 572.70, MSI MPG A1000G 1000W PSU).
 
 ## Features
 - **CPU Tweaks**: AMD/Intel-specific optimizations.
@@ -14,7 +14,7 @@ Boost your Windows 11 gaming rig with TerminalTanks—a collection of `.reg` and
 - **Simulation Mode**: Test tweaks without applying.
 
 ## Usage
-1. **Clone/Download**: Grab the repo and unzip if needed to `\Windows_Optimizations\`.
+1. **Clone/Download**: Grab the repo or download latest release and unzip if needed.
 2. **Run**: (Prompts for Admin privileges)
    - `Run_All.cmd`: Apply tweaks with prompts.
    - `Revert_All.cmd`: Undo all changes (auto-runs `Revert/` files).
@@ -38,15 +38,9 @@ Boost your Windows 11 gaming rig with TerminalTanks—a collection of `.reg` and
 - `7_Graphics\`: Graphics tweaks (e.g., `CS2_High_Performance.cmd`).
 - `*/Revert\`: Revert scripts (e.g., `Revert_Latency_Tweaks.cmd`).
 
-## Registry Key Echo
-- `Run_All.cmd`: Shows "Prior" and "After" values for all `.reg` keys affected—check before/after states.
-
 ## Prerequisites
 - Windows 11, admin rights.
-- Backup your registry (optional but recommended).
-
-## Commit History
-- Latest: "Fixed keyboard menu, added registry key echo in Run_All" - April 08, 2025.
+- Backup your registry (optional but recommended), this program will backup your registry if selected to do so.
 
 ## New Features (April 2025 Update)
 
@@ -135,12 +129,11 @@ Preview (p), Execute (e), or Skip (s)? e
 
 ## Notes
 - Tested on Ryzen 7 7800X3D, RTX 4080 SUPER.
-- Create `CPUType.txt` if missing—script auto-detects AMD/Intel.
 - Report issues on GitHub: `https://github.com/The-Smackers/Windows_Optimizations`.
 
 ## Why?
 Tweaks based on this video: [Make Your CS2 RUN BETTER - (packet loss, latency, clean)](https://www.youtube.com/watch?v=qG7C4W-EQl4) by [youtube.com/@KEROVSKI_](https://www.youtube.com/@KEROVSKI_).
-Need for this repo grew from my TerminalTanks setup; gaming, coding, plants, and planted tanks. Pair Win 11 with Powertoys running FancyZones for window snaps and Workspaces for one-click launches (MPC-HC auto-play baked in). For CS2 enjoyers, voyeurs, fish nerds and frame chasers.
+Need for this repo grew from my TerminalTanks setup; gaming and coding. Pair Win 11 with Powertoys running FancyZones for window snaps and Workspaces for one-click launches (MPC-HC auto-play baked in). For CS2 enjoyers, voyeurs, fish nerds and frame chasers.
 
 ## Contribute
 - **Bugs** PRs welcome—fork it, tweak it, share it.  
