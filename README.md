@@ -81,6 +81,22 @@ The `Simulated_Run_All.cmd` and `Run_All.cmd` scripts have been enhanced with th
 - **Registry Feedback**: Enhanced `.reg` processing to always check and report registry key status ("Key exists" with values or "Key does not exist") before applying tweaks, consistent across `Run_All.cmd` and `Simulated_Run_All.cmd`.
 - **Simulated_Run_All.cmd**: Updated to match `Run_All.cmd` registry feedback, always checking and reporting key status ("Key exists" with values or "Key does not exist") before simulating tweaks with `reg-simulated-import`. Retains selective `.cmd` simulation for `Latency_Tweaks.cmd`.
 
+### Combined Run_All.cmd (April 2025 Update)
+
+The `Run_All.cmd` script now combines the functionality of the previous `Simulated_Run_All.cmd` and `Run_All.cmd` into a single, streamlined tool. Key updates include:
+
+- **Simulation Mode**: Added option 4 ("Simulate all") to the execution mode menu. This runs a dry simulation of all tweaks without applying changes to the registry—perfect for testing.
+- **Unified Workflow**: One script handles both real tweak application and simulation, toggling behavior with a `SIMULATE` flag. No need to juggle separate files anymore.
+- **Enhanced Comments**: Detailed, meaningful comments added throughout the script to explain each section’s purpose (e.g., backup creation, CPU detection, file processing) and highlight specific logic (e.g., why `Latency_Tweaks.cmd` gets special treatment).
+- **Error Handling**: Basic `errorlevel` checks for `reg import` ensure failures (like missing admin rights) are logged and reported.
+
+To use simulation mode:
+1. Run `Run_All.cmd`.
+2. Select `1` (Run tweaks), `n` (skip backup), then `4` (simulate all).
+3. Check `Summary_%COMPUTERNAME%\Optimization_Log.txt` for "Simulated success" entries.
+
+For real tweaks, pick modes 1-3 as before. Logs now distinguish between "Success" (real) and "Simulated success" (dry run).
+
 Run the script from `D:\Videos\apps\Windows_Optimizations` with admin privileges to apply tweaks. Ensure all referenced `.reg` and `.cmd` files exist in their respective subfolders for full functionality.
 
 ### Usage Notes
