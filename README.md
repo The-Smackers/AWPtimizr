@@ -146,4 +146,4 @@ Need for this repo grew from my TerminalTanks setup; gaming, coding, plants, and
 Bugs? PRs welcome—fork it, tweak it, share it.  
 **License**: GNU  
 **More**: Catch TerminalTanks on YouTube—[youtube.com/@TerminalTanks](https://www.youtube.com/@TerminalTanks).
-**Who am I** TerminalTanks(Pb/pdq/idk) is a member of The Smackers.
+**Who am I**: TerminalTanks(Pb/pdq/idk) is a member of The Smackers.
