@@ -2,11 +2,11 @@
 setlocal EnableDelayedExpansion
 echo is on
 
-rem Define summary directory
+rem Define summary directory for logs and CPU type storage, unique to this machine
 set "SUMMARY_DIR=%~dp0Summary_%COMPUTERNAME%"
 mkdir "!SUMMARY_DIR!" 2>nul
 
-rem UAC elevation
+rem Check for admin rights; if not elevated, relaunch with UAC prompt
 net session >nul 2>&1
 if %errorlevel% neq 0 (
     echo Requesting admin rights...
@@ -14,37 +14,40 @@ if %errorlevel% neq 0 (
     exit /b
 )
 
-echo Starting TerminalTanks CS2 Tweaks Application...
+rem Announce startup—keeps user in the loop
+echo Starting TerminalTanks CS2 Tweaks...
 
-rem Initialize logging
+rem Set up logging to track everything—timestamped for debugging
 set "LOG_FILE=!SUMMARY_DIR!\Optimization_Log.txt"
 echo [%DATE% %TIME%] Starting tweak application... >> "!LOG_FILE!"
 
-:tweakmenu
+rem Main menu loop—simple choice between running tweaks or bailing
+:menu
 cls
-echo TerminalTanks CS2 Tweaks Application
+echo TerminalTanks CS2 Tweaks
 echo Current Date: %DATE%
 echo.
-echo 1. Run application
+echo 1. Run tweaks
 echo 2. Exit
 echo.
-set "TWEAK_MENU_CHOICE="
-set /p TWEAK_MENU_CHOICE="Enter choice (1-2): "
-if "!TWEAK_MENU_CHOICE!"=="1" goto tweaks
-if "!TWEAK_MENU_CHOICE!"=="2" exit /b
+set "MENU_CHOICE="
+set /p MENU_CHOICE="Enter choice (1-2): "
+if "!MENU_CHOICE!"=="1" goto tweaks
+if "!MENU_CHOICE!"=="2" exit /b
 echo Invalid choice. Please try again.
 timeout /t 2 >nul
-goto tweakmenu
+goto menu
 
+rem Core tweak logic starts here—backup, mode, CPU detection, and file processing
 :tweaks
-
-rem Backup option
+rem Offer a registry backup—safety net for real changes
 set "BACKUP_PATH=%~dp0Backup"
-mkdir "!BACKUP_PATH!" 2>nul
 set /p "BACKUP=Create registry backup before applying CS2 tweaks? (y/n): "
 if /i "!BACKUP!"=="y" (
+    mkdir "!BACKUP_PATH!" 2>nul
     echo Creating backup...
     echo [%DATE% %TIME%] Creating registry backup... >> "!LOG_FILE!"
+    rem Timestamped filenames to avoid overwriting old backups
     set "BACKUP_HKLM=!BACKUP_PATH!\HKLM_SYSTEM_%DATE:~-4%%DATE:~4,2%%DATE:~7,2%.reg"
     set "BACKUP_HKCU=!BACKUP_PATH!\HKCU_%DATE:~-4%%DATE:~4,2%%DATE:~7,2%.reg"
     if exist "!BACKUP_HKLM!" (
@@ -64,15 +67,17 @@ if /i "!BACKUP!"=="y" (
     echo [%DATE% %TIME%] Backup saved to !BACKUP_PATH! >> "!LOG_FILE!"
 )
 
-rem Batch execution mode
+rem Execution mode selection—controls how tweaks are applied or simulated
 echo Choose execution mode:
 echo 1: Prompt for each file (default)
 echo 2: Execute all automatically
 echo 3: Skip all automatically
-set /p "MODE=Enter choice (1-3): "
-if "!MODE!"=="2" (set "DEFAULT_CHOICE=e") else if "!MODE!"=="3" (set "DEFAULT_CHOICE=s") else (set "DEFAULT_CHOICE=")
+echo 4: Simulate all (no changes applied)
+set /p "MODE=Enter choice (1-4): "
+rem Set defaults: mode 4 enables simulation, others set execute/skip or prompt
+if "!MODE!"=="2" (set "DEFAULT_CHOICE=e") else if "!MODE!"=="3" (set "DEFAULT_CHOICE=s") else if "!MODE!"=="4" (set "SIMULATE=1" & set "DEFAULT_CHOICE=e") else (set "DEFAULT_CHOICE=" & set "SIMULATE=0")
 
-rem CPU type detection
+rem Detect CPU type—used for CPU-specific tweaks in 1_CPU folder
 set "CPU_FILE=!SUMMARY_DIR!\CPUType.txt"
 set "CPU_TYPE="
 if exist "!CPU_FILE!" (
@@ -97,6 +102,7 @@ if exist "!CPU_FILE!" (
 if not defined CPU_TYPE (
     echo Detecting CPU...
     echo [%DATE% %TIME%] Detecting CPU... >> "!LOG_FILE!"
+    rem Pull CPU manufacturer via WMIC—fancy but reliable
     for /f "tokens=2 delims==" %%A in ('wmic cpu get manufacturer /value ^| find "Manufacturer="') do set "CPU_MFR=%%A"
     if /i "!CPU_MFR:~0,5!"=="Intel" (
         set "CPU_TYPE=Intel"
@@ -114,13 +120,13 @@ if not defined CPU_TYPE (
     echo !CPU_TYPE!>"!CPU_FILE!"
 )
 
-rem Count total files to process (excluding keyboard files, adding 1 for choice, excluding Backup)
+rem Count total files—sets up progress tracking, excludes revert/reset/Backup
 set "TOTAL_FILES=0"
 set "PROCESSED_FILES=0"
 echo Scanning subfolders...
 echo [%DATE% %TIME%] Scanning subfolders... >> "!LOG_FILE!"
 
-rem Non-CPU/Input/Backup folders
+rem Scan non-CPU/Input/Backup folders (e.g., 2_Game)
 for /d %%D in ("%~dp0*") do (
     if /i NOT "%%~nxD"=="1_CPU" if /i NOT "%%~nxD"=="4_Input" if /i NOT "%%~nxD"=="Backup" (
         for %%F in ("%%D\*.reg" "%%D\*.cmd") do (
@@ -137,7 +143,7 @@ for /d %%D in ("%~dp0*") do (
     )
 )
 
-rem CPU folder
+rem Scan CPU-specific folder based on detected type
 set "CPU_PATH=%~dp01_CPU\!CPU_TYPE!"
 if exist "!CPU_PATH!\" (
     for %%F in ("!CPU_PATH!\*.reg" "!CPU_PATH!\*.cmd") do (
@@ -153,7 +159,7 @@ if exist "!CPU_PATH!\" (
     )
 )
 
-rem Input folder (Mouse only)
+rem Scan Mouse folder—input tweaks are split between Mouse and Keyboard
 set "MOUSE_PATH=%~dp04_Input\Mouse"
 if exist "!MOUSE_PATH!\" (
     for %%F in ("!MOUSE_PATH!\*.reg" "!MOUSE_PATH!\*.cmd") do (
@@ -169,17 +175,18 @@ if exist "!MOUSE_PATH!\" (
     )
 )
 
-rem Add 1 for the keyboard choice
+rem Add 1 for keyboard choice—treated as a single "file" in the count
 set /a TOTAL_FILES+=1
 
+rem Bail if no files found—avoids pointless processing
 if !TOTAL_FILES! equ 0 (
     echo No tweak files found in subfolders. Returning to menu...
-    echo [%DATE% %TIME%] No tweak files found in subfolders. Returning to menu... >> "!LOG_FILE!"
+    echo [%DATE% %TIME%] No tweak files found in subfolders. >> "!LOG_FILE!"
     timeout /t 2 >nul
-    goto tweakmenu
+    goto menu
 )
 
-rem Process files with user prompts (actual .reg imports and .cmd execution)
+rem Process non-CPU/Input/Backup folders—main tweak application loop
 for /d %%D in ("%~dp0*") do (
     if /i NOT "%%~nxD"=="1_CPU" if /i NOT "%%~nxD"=="4_Input" if /i NOT "%%~nxD"=="Backup" (
         echo Entering folder: %%~nxD
@@ -219,39 +226,63 @@ for /d %%D in ("%~dp0*") do (
                     echo [%DATE% %TIME%] Applying: !FILE_NAME! >> "!LOG_FILE!"
                     if /i "%%~xF"==".reg" (
                         echo Checking registry applicability...
+                        rem Verify keys exist before applying—helps debug
                         for /f "delims=" %%K in ('type "%%F" ^| findstr /i "HKEY"') do (
-                            reg query "%%K" >nul 2>&1
+                            set "KEY_PATH=%%K"
+                            set "KEY_PATH=!KEY_PATH:[=!"
+                            set "KEY_PATH=!KEY_PATH:]=!"
+                            echo Debug: Querying !KEY_PATH! >> "!LOG_FILE!"
+                            reg query "!KEY_PATH!" >nul 2>&1
                             if !errorlevel! equ 0 (
-                                echo Key exists: %%K
-                                echo [%DATE% %TIME%] Key exists: %%K for !FILE_NAME! >> "!LOG_FILE!"
-                                rem Show key values
-                                for /f "tokens=1,2,3" %%V in ('reg query "%%K"') do (
-                                    if "%%V"=="!%%V!" if not "%%W"=="" (
-                                        echo   Value: %%V = %%W
-                                        echo [%DATE% %TIME%]   Value: %%V = %%W for !FILE_NAME! >> "!LOG_FILE!"
+                                echo [%DATE% %TIME%] Key exists: !KEY_PATH! for !FILE_NAME! >> "!LOG_FILE!"
+                                for /f "tokens=1,2,*" %%V in ('reg query "!KEY_PATH!" 2^>nul') do (
+                                    if "%%W" NEQ "" (
+                                        echo [%DATE% %TIME%] Value: %%V = %%W %%X for !FILE_NAME! >> "!LOG_FILE!"
                                     )
                                 )
                             ) else (
-                                echo Key does not exist: %%K
-                                echo [%DATE% %TIME%] Key does not exist: %%K for !FILE_NAME! >> "!LOG_FILE!"
+                                echo Key does not exist: !KEY_PATH!
+                                echo [%DATE% %TIME%] Key does not exist: !KEY_PATH! for !FILE_NAME! >> "!LOG_FILE!"
                             )
                         )
-                        reg import "%%F" /reg:64
-                        if !errorlevel! equ 0 (
-                            <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
-                            echo [%DATE% %TIME%] Success: !FILE_NAME! >> "!LOG_FILE!"
+                        rem Toggle between simulation and real import
+                        if "!SIMULATE!"=="1" (
+                            echo reg-simulated-import "%%F"
+                            echo [%DATE% %TIME%] Simulated success for !FILE_NAME! >> "!LOG_FILE!"
                         ) else (
-                            echo [!PROCESSED_FILES!/!TOTAL_FILES!] Failed to import: !FILE_NAME! - Check admin rights or file.
-                            echo [%DATE% %TIME%] Failed: !FILE_NAME! >> "!LOG_FILE!"
+                            reg import "%%F" /reg:64
+                            if !errorlevel! equ 0 (
+                                echo [%DATE% %TIME%] Success for !FILE_NAME! >> "!LOG_FILE!"
+                            ) else (
+                                echo [%DATE% %TIME%] Failed to import !FILE_NAME! - Check admin rights or file >> "!LOG_FILE!"
+                                echo Failed to import !FILE_NAME!
+                            )
                         )
+                        <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
+                    ) else if /i "!FILE_NAME!"=="Latency_Tweaks.cmd" (
+                        rem Special case for Latency_Tweaks—simulate or run
+                        if "!SIMULATE!"=="1" (
+                            echo call-simulated "%%F"
+                            echo [%DATE% %TIME%] Simulated success for !FILE_NAME! >> "!LOG_FILE!"
+                        ) else (
+                            call "%%F"
+                            if !errorlevel! equ 0 (
+                                echo [%DATE% %TIME%] Success for !FILE_NAME! >> "!LOG_FILE!"
+                            ) else (
+                                echo [%DATE% %TIME%] Failed: !FILE_NAME! - Check admin rights or file >> "!LOG_FILE!"
+                                echo Failed: !FILE_NAME!
+                            )
+                        )
+                        <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
                     ) else (
+                        rem Generic .cmd execution—always runs unless simulated
                         call "%%F"
                         if !errorlevel! equ 0 (
-                            <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
                             echo [%DATE% %TIME%] Success: !FILE_NAME! >> "!LOG_FILE!"
+                            <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
                         ) else (
-                            echo [!PROCESSED_FILES!/!TOTAL_FILES!] Failed: !FILE_NAME! - Check admin rights or file.
-                            echo [%DATE% %TIME%] Failed: !FILE_NAME! >> "!LOG_FILE!"
+                            echo [%DATE% %TIME%] Failed: !FILE_NAME! - Check admin rights or file >> "!LOG_FILE!"
+                            echo [!PROCESSED_FILES!/!TOTAL_FILES!] Failed: !FILE_NAME!
                         )
                     )
                 ) else if /i "!CHOICE!"=="s" (
@@ -266,6 +297,7 @@ for /d %%D in ("%~dp0*") do (
     )
 )
 
+rem Process CPU-specific tweaks—same logic, different folder
 if exist "!CPU_PATH!\" (
     echo Entering folder: 1_CPU\!CPU_TYPE!
     echo [%DATE% %TIME%] Entering folder: 1_CPU\!CPU_TYPE! >> "!LOG_FILE!"
@@ -305,38 +337,58 @@ if exist "!CPU_PATH!\" (
                 if /i "%%~xF"==".reg" (
                     echo Checking registry applicability...
                     for /f "delims=" %%K in ('type "%%F" ^| findstr /i "HKEY"') do (
-                        reg query "%%K" >nul 2>&1
+                        set "KEY_PATH=%%K"
+                        set "KEY_PATH=!KEY_PATH:[=!"
+                        set "KEY_PATH=!KEY_PATH:]=!"
+                        echo Debug: Querying !KEY_PATH! >> "!LOG_FILE!"
+                        reg query "!KEY_PATH!" >nul 2>&1
                         if !errorlevel! equ 0 (
-                            echo Key exists: %%K
-                            echo [%DATE% %TIME%] Key exists: %%K for !FILE_NAME! >> "!LOG_FILE!"
-                            rem Show key values
-                            for /f "tokens=1,2,3" %%V in ('reg query "%%K"') do (
-                                if "%%V"=="!%%V!" if not "%%W"=="" (
-                                    echo   Value: %%V = %%W
-                                    echo [%DATE% %TIME%]   Value: %%V = %%W for !FILE_NAME! >> "!LOG_FILE!"
+                            echo [%DATE% %TIME%] Key exists: !KEY_PATH! for !FILE_NAME! >> "!LOG_FILE!"
+                            for /f "tokens=1,2,*" %%V in ('reg query "!KEY_PATH!" 2^>nul') do (
+                                if "%%W" NEQ "" (
+                                    echo [%DATE% %TIME%] Value: %%V = %%W %%X for !FILE_NAME! >> "!LOG_FILE!"
                                 )
                             )
                         ) else (
-                            echo Key does not exist: %%K
-                            echo [%DATE% %TIME%] Key does not exist: %%K for !FILE_NAME! >> "!LOG_FILE!"
+                            echo Key does not exist: !KEY_PATH!
+                            echo [%DATE% %TIME%] Key does not exist: !KEY_PATH! for !FILE_NAME! >> "!LOG_FILE!"
                         )
                     )
-                    reg import "%%F" /reg:64
-                    if !errorlevel! equ 0 (
-                        <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
-                        echo [%DATE% %TIME%] Success: !FILE_NAME! >> "!LOG_FILE!"
+                    if "!SIMULATE!"=="1" (
+                        echo reg-simulated-import "%%F"
+                        echo [%DATE% %TIME%] Simulated success for !FILE_NAME! >> "!LOG_FILE!"
                     ) else (
-                        echo [!PROCESSED_FILES!/!TOTAL_FILES!] Failed to import: !FILE_NAME! - Check admin rights or file.
-                        echo [%DATE% %TIME%] Failed: !FILE_NAME! >> "!LOG_FILE!"
+                        reg import "%%F" /reg:64
+                        if !errorlevel! equ 0 (
+                            echo [%DATE% %TIME%] Success for !FILE_NAME! >> "!LOG_FILE!"
+                        ) else (
+                            echo [%DATE% %TIME%] Failed to import !FILE_NAME! - Check admin rights or file >> "!LOG_FILE!"
+                            echo Failed to import !FILE_NAME!
+                        )
                     )
+                    <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
+                ) else if /i "!FILE_NAME!"=="Latency_Tweaks.cmd" (
+                    if "!SIMULATE!"=="1" (
+                        echo call-simulated "%%F"
+                        echo [%DATE% %TIME%] Simulated success for !FILE_NAME! >> "!LOG_FILE!"
+                    ) else (
+                        call "%%F"
+                        if !errorlevel! equ 0 (
+                            echo [%DATE% %TIME%] Success for !FILE_NAME! >> "!LOG_FILE!"
+                        ) else (
+                            echo [%DATE% %TIME%] Failed: !FILE_NAME! - Check admin rights or file >> "!LOG_FILE!"
+                            echo Failed: !FILE_NAME!
+                        )
+                    )
+                    <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
                 ) else (
                     call "%%F"
                     if !errorlevel! equ 0 (
-                        <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
                         echo [%DATE% %TIME%] Success: !FILE_NAME! >> "!LOG_FILE!"
+                        <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
                     ) else (
-                        echo [!PROCESSED_FILES!/!TOTAL_FILES!] Failed: !FILE_NAME! - Check admin rights or file.
-                        echo [%DATE% %TIME%] Failed: !FILE_NAME! >> "!LOG_FILE!"
+                        echo [%DATE% %TIME%] Failed: !FILE_NAME! - Check admin rights or file >> "!LOG_FILE!"
+                        echo [!PROCESSED_FILES!/!TOTAL_FILES!] Failed: !FILE_NAME!
                     )
                 )
             ) else if /i "!CHOICE!"=="s" (
@@ -350,6 +402,7 @@ if exist "!CPU_PATH!\" (
     )
 )
 
+rem Process Mouse tweaks—consistent with other sections
 if exist "!MOUSE_PATH!\" (
     echo Entering folder: 4_Input\Mouse
     echo [%DATE% %TIME%] Entering folder: 4_Input\Mouse >> "!LOG_FILE!"
@@ -389,38 +442,58 @@ if exist "!MOUSE_PATH!\" (
                 if /i "%%~xF"==".reg" (
                     echo Checking registry applicability...
                     for /f "delims=" %%K in ('type "%%F" ^| findstr /i "HKEY"') do (
-                        reg query "%%K" >nul 2>&1
+                        set "KEY_PATH=%%K"
+                        set "KEY_PATH=!KEY_PATH:[=!"
+                        set "KEY_PATH=!KEY_PATH:]=!"
+                        echo Debug: Querying !KEY_PATH! >> "!LOG_FILE!"
+                        reg query "!KEY_PATH!" >nul 2>&1
                         if !errorlevel! equ 0 (
-                            echo Key exists: %%K
-                            echo [%DATE% %TIME%] Key exists: %%K for !FILE_NAME! >> "!LOG_FILE!"
-                            rem Show key values
-                            for /f "tokens=1,2,3" %%V in ('reg query "%%K"') do (
-                                if "%%V"=="!%%V!" if not "%%W"=="" (
-                                    echo   Value: %%V = %%W
-                                    echo [%DATE% %TIME%]   Value: %%V = %%W for !FILE_NAME! >> "!LOG_FILE!"
+                            echo [%DATE% %TIME%] Key exists: !KEY_PATH! for !FILE_NAME! >> "!LOG_FILE!"
+                            for /f "tokens=1,2,*" %%V in ('reg query "!KEY_PATH!" 2^>nul') do (
+                                if "%%W" NEQ "" (
+                                    echo [%DATE% %TIME%] Value: %%V = %%W %%X for !FILE_NAME! >> "!LOG_FILE!"
                                 )
                             )
                         ) else (
-                            echo Key does not exist: %%K
-                            echo [%DATE% %TIME%] Key does not exist: %%K for !FILE_NAME! >> "!LOG_FILE!"
+                            echo Key does not exist: !KEY_PATH!
+                            echo [%DATE% %TIME%] Key does not exist: !KEY_PATH! for !FILE_NAME! >> "!LOG_FILE!"
                         )
                     )
-                    reg import "%%F" /reg:64
-                    if !errorlevel! equ 0 (
-                        <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
-                        echo [%DATE% %TIME%] Success: !FILE_NAME! >> "!LOG_FILE!"
+                    if "!SIMULATE!"=="1" (
+                        echo reg-simulated-import "%%F"
+                        echo [%DATE% %TIME%] Simulated success for !FILE_NAME! >> "!LOG_FILE!"
                     ) else (
-                        echo [!PROCESSED_FILES!/!TOTAL_FILES!] Failed to import: !FILE_NAME! - Check admin rights or file.
-                        echo [%DATE% %TIME%] Failed: !FILE_NAME! >> "!LOG_FILE!"
+                        reg import "%%F" /reg:64
+                        if !errorlevel! equ 0 (
+                            echo [%DATE% %TIME%] Success for !FILE_NAME! >> "!LOG_FILE!"
+                        ) else (
+                            echo [%DATE% %TIME%] Failed to import !FILE_NAME! - Check admin rights or file >> "!LOG_FILE!"
+                            echo Failed to import !FILE_NAME!
+                        )
                     )
+                    <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
+                ) else if /i "!FILE_NAME!"=="Latency_Tweaks.cmd" (
+                    if "!SIMULATE!"=="1" (
+                        echo call-simulated "%%F"
+                        echo [%DATE% %TIME%] Simulated success for !FILE_NAME! >> "!LOG_FILE!"
+                    ) else (
+                        call "%%F"
+                        if !errorlevel! equ 0 (
+                            echo [%DATE% %TIME%] Success for !FILE_NAME! >> "!LOG_FILE!"
+                        ) else (
+                            echo [%DATE% %TIME%] Failed: !FILE_NAME! - Check admin rights or file >> "!LOG_FILE!"
+                            echo Failed: !FILE_NAME!
+                        )
+                    )
+                    <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
                 ) else (
                     call "%%F"
                     if !errorlevel! equ 0 (
-                        <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
                         echo [%DATE% %TIME%] Success: !FILE_NAME! >> "!LOG_FILE!"
+                        <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
                     ) else (
-                        echo [!PROCESSED_FILES!/!TOTAL_FILES!] Failed: !FILE_NAME! - Check admin rights or file.
-                        echo [%DATE% %TIME%] Failed: !FILE_NAME! >> "!LOG_FILE!"
+                        echo [%DATE% %TIME%] Failed: !FILE_NAME! - Check admin rights or file >> "!LOG_FILE!"
+                        echo [!PROCESSED_FILES!/!TOTAL_FILES!] Failed: !FILE_NAME!
                     )
                 )
             ) else if /i "!CHOICE!"=="s" (
@@ -434,7 +507,7 @@ if exist "!MOUSE_PATH!\" (
     )
 )
 
-rem Keyboard selection
+rem Handle keyboard selection—user picks one .reg file, counts as one "file"
 set "KEYBOARD_PATH=%~dp04_Input\Keyboard"
 if exist "!KEYBOARD_PATH!\" (
     echo Entering folder: 4_Input\Keyboard
@@ -442,7 +515,7 @@ if exist "!KEYBOARD_PATH!\" (
     set /a PROCESSED_FILES+=1
     set /a "PERCENT=PROCESSED_FILES*100/TOTAL_FILES"
     if defined DEFAULT_CHOICE if /i "!DEFAULT_CHOICE!"=="s" (
-        REM Default to skipping keyboard tweak when mode is "Skip all"
+        rem Auto-skip in mode 3—defaults to Wooting 1000hz file
         set "KB_FILE=!KEYBOARD_PATH!\4_Wooting_Fullsized_Keyboard.reg"
         set "FILE_NAME=4_Wooting_Fullsized_Keyboard.reg"
         echo [!PROCESSED_FILES!/!TOTAL_FILES!] [!PERCENT!%%] Found: !FILE_NAME!
@@ -450,7 +523,7 @@ if exist "!KEYBOARD_PATH!\" (
         <nul set /p "=[31m[!PROCESSED_FILES!/!TOTAL_FILES!] Skipped: !FILE_NAME![0m" & echo.
         echo [%DATE% %TIME%] Skipped: !FILE_NAME! >> "!LOG_FILE!"
     ) else (
-        REM Prompt for keyboard choice in both Mode 1 and Mode 2
+        rem Prompt for keyboard type—modes 1, 2, 4 get a choice
         echo [!PROCESSED_FILES!/!TOTAL_FILES!] [!PERCENT!%%] Selecting keyboard tweak...
         echo [%DATE% %TIME%] [!PROCESSED_FILES!/!TOTAL_FILES!] Selecting keyboard tweak... >> "!LOG_FILE!"
         echo What kind of Keyboard do you have?
@@ -471,6 +544,7 @@ if exist "!KEYBOARD_PATH!\" (
             echo Invalid choice. Please enter a number between 1 and 6.
             goto keyboard_prompt
         )
+        rem Map choice to specific keyboard .reg file
         if "!KB_CHOICE!"=="1" (
             set "KB_FILE=!KEYBOARD_PATH!\1_Low_End_Keyboard.reg"
             set "FILE_NAME=1_Low_End_Keyboard.reg"
@@ -493,7 +567,7 @@ if exist "!KEYBOARD_PATH!\" (
         if defined KB_FILE (
             if exist "!KB_FILE!" (
                 if not defined DEFAULT_CHOICE (
-                    REM Mode 1: Prompt for Preview/Execute/Skip
+                    rem Mode 1: Full prompt for keyboard tweak
                     :prompt_user_keyboard
                     <nul set /p "=[1;33mPreview (p), Execute (e), or Skip (s)? [0m"
                     set /p "CHOICE="
@@ -512,7 +586,7 @@ if exist "!KEYBOARD_PATH!\" (
                         goto :prompt_user_keyboard
                     )
                 ) else if /i "!DEFAULT_CHOICE!"=="e" (
-                    REM Mode 2: Auto-execute after selection
+                    rem Modes 2 and 4: Auto-execute after selection
                     set "CHOICE=e"
                     echo Auto-choice: e for !FILE_NAME!
                 )
@@ -521,30 +595,36 @@ if exist "!KEYBOARD_PATH!\" (
                     echo [%DATE% %TIME%] Applying: !FILE_NAME! >> "!LOG_FILE!"
                     echo Checking registry applicability...
                     for /f "delims=" %%K in ('type "!KB_FILE!" ^| findstr /i "HKEY"') do (
-                        reg query "%%K" >nul 2>&1
+                        set "KEY_PATH=%%K"
+                        set "KEY_PATH=!KEY_PATH:[=!"
+                        set "KEY_PATH=!KEY_PATH:]=!"
+                        echo Debug: Querying !KEY_PATH! >> "!LOG_FILE!"
+                        reg query "!KEY_PATH!" >nul 2>&1
                         if !errorlevel! equ 0 (
-                            echo Key exists: %%K
-                            echo [%DATE% %TIME%] Key exists: %%K for !FILE_NAME! >> "!LOG_FILE!"
-                            rem Show key values
-                            for /f "tokens=1,2,3" %%V in ('reg query "%%K"') do (
-                                if "%%V"=="!%%V!" if not "%%W"=="" (
-                                    echo   Value: %%V = %%W
-                                    echo [%DATE% %TIME%]   Value: %%V = %%W for !FILE_NAME! >> "!LOG_FILE!"
+                            echo [%DATE% %TIME%] Key exists: !KEY_PATH! for !FILE_NAME! >> "!LOG_FILE!"
+                            for /f "tokens=1,2,*" %%V in ('reg query "!KEY_PATH!" 2^>nul') do (
+                                if "%%W" NEQ "" (
+                                    echo [%DATE% %TIME%] Value: %%V = %%W %%X for !FILE_NAME! >> "!LOG_FILE!"
                                 )
                             )
                         ) else (
-                            echo Key does not exist: %%K
-                            echo [%DATE% %TIME%] Key does not exist: %%K for !FILE_NAME! >> "!LOG_FILE!"
+                            echo Key does not exist: !KEY_PATH!
+                            echo [%DATE% %TIME%] Key does not exist: !KEY_PATH! for !FILE_NAME! >> "!LOG_FILE!"
                         )
                     )
-                    reg import "!KB_FILE!" /reg:64
-                    if !errorlevel! equ 0 (
-                        <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
-                        echo [%DATE% %TIME%] Success: !FILE_NAME! >> "!LOG_FILE!"
+                    if "!SIMULATE!"=="1" (
+                        echo reg-simulated-import "!KB_FILE!"
+                        echo [%DATE% %TIME%] Simulated success for !FILE_NAME! >> "!LOG_FILE!"
                     ) else (
-                        echo [!PROCESSED_FILES!/!TOTAL_FILES!] Failed to import: !FILE_NAME! - Check admin rights or file.
-                        echo [%DATE% %TIME%] Failed: !FILE_NAME! >> "!LOG_FILE!"
+                        reg import "!KB_FILE!" /reg:64
+                        if !errorlevel! equ 0 (
+                            echo [%DATE% %TIME%] Success for !FILE_NAME! >> "!LOG_FILE!"
+                        ) else (
+                            echo [%DATE% %TIME%] Failed to import !FILE_NAME! - Check admin rights or file >> "!LOG_FILE!"
+                            echo Failed to import !FILE_NAME!
+                        )
                     )
+                    <nul set /p "=[32m[!PROCESSED_FILES!/!TOTAL_FILES!] Success: !FILE_NAME![0m" & echo.
                 ) else if /i "!CHOICE!"=="s" (
                     <nul set /p "=[31m[!PROCESSED_FILES!/!TOTAL_FILES!] Skipped: !FILE_NAME![0m" & echo.
                     echo [%DATE% %TIME%] Skipped: !FILE_NAME! >> "!LOG_FILE!"
@@ -557,8 +637,14 @@ if exist "!KEYBOARD_PATH!\" (
     )
 )
 
-echo CS2 Tweaks application complete! Restart recommended.
-echo [%DATE% %TIME%] Tweaks application complete! Restart recommended. >> "!LOG_FILE!"
+rem Wrap up—message depends on simulation or real run
+if "!SIMULATE!"=="1" (
+    echo Simulation of CS2 tweaks complete! No changes applied to registry.
+    echo [%DATE% %TIME%] Simulation complete! >> "!LOG_FILE!"
+) else (
+    echo CS2 Tweaks application complete! Restart recommended.
+    echo [%DATE% %TIME%] Tweaks application complete! Restart recommended. >> "!LOG_FILE!"
+)
 timeout /t 2 >nul
 pause
-goto tweakmenu
+goto menu
