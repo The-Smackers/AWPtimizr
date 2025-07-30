@@ -9,6 +9,7 @@
 **Z**ero Jitter  
 **R**ollback Protection
 
+![AWPtimizr Logo](./logo.png)
 
 A command-line tool to apply and revert common Windows and CS2 performance tweaks via registry and script files.
 
