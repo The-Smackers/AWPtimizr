@@ -27,9 +27,9 @@ A command-line tool to apply and revert common Windows and CS2 performance tweak
 - **Simulation Mode**: Test tweaks without applying.
 
 ## Usage
-1. **Clone/Download**: Grab the repo or download latest release and unzip if needed.
+1. **Clone/Download**: Grab the repo or [download latest release](https://github.com/The-Smackers/AWPtimizr/releases) and unzip if needed.
 2. **Run in terminal or click file**: (Prompts for Admin privileges)
-   - `AWPtimizr.cmd`: Apply or Undo all changes/tweaks with prompts.
+   - `AWPtimizr.cmd`: Apply or Revert all changes/tweaks with prompts.
 4. **Reboot**: Required after applying tuning tweaks or reverting tuning tweaks.
 
 ## Folder Structure
@@ -114,15 +114,15 @@ Preview (p), Execute (e), or Skip (s)? e
 - Tested on Ryzen 7 7800X3D, RTX 4080 SUPER.
 - Report issues on GitHub: `https://github.com/The-Smackers/Windows_Optimizations`.
 
-## Why?
+## Why does this exist?
 Inspiration from [Chris Titus Tech's Windows Utility](https://github.com/ChrisTitusTech/winutil).  
 Some tweaks based on this video: [Make Your CS2 RUN BETTER - (packet loss, latency, clean)](https://www.youtube.com/watch?v=qG7C4W-EQl4).
 
 ## Contribute
 - **Bugs** Fork it, tweak it, share it.  
 - **License**: GNU  
-- **More**: TerminalTanks on YouTube—[youtube.com/@TerminalTanks](https://www.youtube.com/@TerminalTanks).
-- **Who**: TerminalTanks (idk) is a member of The Smackers.
+- **Links**: [youtube.com/@TerminalTanks](https://www.youtube.com/@TerminalTanks).
+- **Who**: idk/Pb is a member of The Smackers.
 
 ## 💖 Support
-If you find this project or developer helpful, consider [donating via PayPal](https://www.paypal.com/ncp/payment/8UEVM2WHXGL88).
+If you find this project or its developer helpful, consider [donating](https://www.paypal.com/ncp/payment/8UEVM2WHXGL88).
