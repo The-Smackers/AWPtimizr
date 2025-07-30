@@ -1,0 +1,24 @@
+Registry Tweak Explained:
+
+Path: HKEY_CURRENT_USER\Control Panel\Mouse (Multiple Entries):
+
+"MouseSensitivity"=10": Default sensitivity.
+
+"SmoothMouseXCurve"/"SmoothMouseYCurve": Custom curves for mouse smoothing (two conflicting sets).
+
+HKEY_USERS.DEFAULT\Control Panel\Mouse:
+"MouseSpeed"=0", "MouseThreshold1"=0", "MouseThreshold2"=0": No acceleration.
+
+Safety?
+
+BSOD Risk: None—user-level settings.
+
+FACEIT: Safe—mouse tweaks are allowed.
+
+Effectiveness?
+
+CS2: Disables acceleration (good for aim consistency), custom curves adjust sensitivity feel.
+
+Risk: No risk.
+
+Okay?: Yes.
