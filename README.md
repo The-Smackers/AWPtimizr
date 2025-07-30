@@ -82,15 +82,14 @@ Disable Windows Event Collector
 
 To test, select simulation mode:
 1. Run `AWPtimizr.cmd`.
-2. Select `1` (Run revert tweaks), then `4` (simulate all).
-3. Check the log for "Simulated success" entries—no system changes applied.
+2. Select `1` (Run tweaks), then `4` (simulate all).
+3. Check the log for "Simulated success" entries, no system changes applied.
 
-For real reverts, use modes 1-3. Logs distinguish between "Success" (real) and "Simulated success" (dry run), with a reboot recommended after real runs.
+For real changes to system, use modes 1-3. Logs distinguish between "Success" (real) and "Simulated success" (dry run), with a reboot recommended after real runs.
 
-Run the script with admin privileges to apply tweaks. Ensure all referenced `.reg` and `.cmd` files exist in their respective subfolders for full functionality.
+Ensure all referenced `.reg` and `.cmd` files exist in their respective subfolders for full functionality.
 
 ### Usage Notes
-- Run scripts with administrative privileges (UAC prompt will appear if needed).
 - Check `Optimization_Log.txt` after execution for a detailed run history.
 - Backups are timestamped (e.g., `HKLM_SYSTEM_20250408.reg`) and stored in the `Backup` subfolder.
 
