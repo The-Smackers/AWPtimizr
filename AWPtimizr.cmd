@@ -23,7 +23,7 @@ if %errorlevel% neq 0 (
 )
 
 rem Announce startup
-echo Starting TerminalTanks AWPtimizr Tuning Tool...
+echo Starting AWPtimizr Tuning Tool...
 
 rem Set up logging—single log for consistency
 set "LOG_FILE=!SUMMARY_DIR!\Optimization_Log.txt"
@@ -121,6 +121,46 @@ if /i "!BACKUP!"=="y" (
 )
 goto :eof
 
+rem Clear DirectX Shader Cache subroutine
+:clear_dx_cache
+echo Clearing DirectX Shader Cache...
+echo [%DATE% %TIME%] Clearing DirectX Shader Cache... >> "!LOG_FILE!"
+del /s /f /q "%LocalAppData%\D3DSCache\*" >nul 2>&1
+rmdir /s /q "%LocalAppData%\D3DSCache" >nul 2>&1
+mkdir "%LocalAppData%\D3DSCache" >nul 2>&1
+if !errorlevel! equ 0 (
+    echo [%DATE% %TIME%] Success: DirectX Shader Cache cleared >> "!LOG_FILE!"
+    <nul set /p "=[32mSuccess: DirectX Shader Cache cleared[0m" & echo.
+) else (
+    echo [%DATE% %TIME%] Failed: DirectX Shader Cache deletion >> "!LOG_FILE!"
+    <nul set /p "=[31mFailed: DirectX Shader Cache deletion[0m" & echo.
+)
+echo Terminating cs2.exe if running...
+echo [%DATE% %TIME%] Terminating cs2.exe... >> "!LOG_FILE!"
+taskkill /f /im cs2.exe >nul 2>&1
+if !errorlevel! equ 0 (
+    echo [%DATE% %TIME%] Success: cs2.exe terminated >> "!LOG_FILE!"
+    <nul set /p "=[32mSuccess: cs2.exe terminated[0m" & echo.
+) else (
+    echo [%DATE% %TIME%] Note: cs2.exe was not running or failed to terminate >> "!LOG_FILE!"
+    <nul set /p "=[33mNote: cs2.exe was not running or failed to terminate[0m" & echo.
+)
+timeout /t 3 >nul
+echo Starting Steam validation for app ID 730...
+echo [%DATE% %TIME%] Starting Steam validation for app ID 730... >> "!LOG_FILE!"
+start steam://validate/730 >nul 2>&1
+if !errorlevel! equ 0 (
+    echo [%DATE% %TIME%] Success: Steam validation initiated for app ID 730 >> "!LOG_FILE!"
+    <nul set /p "=[32mSuccess: Steam validation initiated[0m" & echo.
+) else (
+    echo [%DATE% %TIME%] Failed: Steam validation initiation >> "!LOG_FILE!"
+    <nul set /p "=[31mFailed: Steam validation initiation[0m" & echo.
+)
+echo Done.
+echo [%DATE% %TIME%] Done clearing DirectX Shader Cache and Steam validation has started in another window >> "!LOG_FILE!"
+timeout /t 2 >nul
+goto :eof
+
 rem Tweaks application logic
 :tweaks
 echo Starting tweak application...
@@ -132,11 +172,12 @@ rem Execution mode selection with light purple
 echo [95mChoose execution mode:[0m
 echo [95m1: Prompt for each file (default)[0m
 echo [95m2: Execute all automatically[0m
-echo [95m3: Skip all automatically[0m
+echo [95m3: Skip all automatically (exit)[0m
 echo [95m4: Simulate all (no changes applied)[0m
-<nul set /p "=[95mEnter choice (1-4): [0m"
+echo [95m5: Delete DirectX Shader Cache (fix for FPS loss)[0m
+<nul set /p "=[95mEnter choice (1-5): [0m"
 set /p "MODE="
-if "!MODE!"=="2" (set "DEFAULT_CHOICE=e") else if "!MODE!"=="3" (set "DEFAULT_CHOICE=s") else if "!MODE!"=="4" (set "SIMULATE=1" & set "DEFAULT_CHOICE=e") else (set "DEFAULT_CHOICE=" & set "SIMULATE=0")
+if "!MODE!"=="2" (set "DEFAULT_CHOICE=e") else if "!MODE!"=="3" (set "DEFAULT_CHOICE=s") else if "!MODE!"=="4" (set "SIMULATE=1" & set "DEFAULT_CHOICE=e") else if "!MODE!"=="5" (call :clear_dx_cache & pause & goto tweaks) else (set "DEFAULT_CHOICE=" & set "SIMULATE=0")
 
 call :detect_cpu
 
@@ -267,9 +308,10 @@ echo [95m1: Prompt for each file (default)[0m
 echo [95m2: Execute all automatically[0m
 echo [95m3: Skip all automatically (exit)[0m
 echo [95m4: Simulate all (no changes applied)[0m
-<nul set /p "=[95mEnter choice (1-4): [0m"
+echo [95m5: Delete DirectX Shader Cache[0m
+<nul set /p "=[95mEnter choice (1-5): [0m"
 set /p "MODE="
-if "!MODE!"=="2" (set "DEFAULT_CHOICE=e") else if "!MODE!"=="3" (set "DEFAULT_CHOICE=s") else if "!MODE!"=="4" (set "SIMULATE=1" & set "DEFAULT_CHOICE=e") else (set "DEFAULT_CHOICE=" & set "SIMULATE=0")
+if "!MODE!"=="2" (set "DEFAULT_CHOICE=e") else if "!MODE!"=="3" (set "DEFAULT_CHOICE=s") else if "!MODE!"=="4" (set "SIMULATE=1" & set "DEFAULT_CHOICE=e") else if "!MODE!"=="5" (call :clear_dx_cache & pause & goto revert) else (set "DEFAULT_CHOICE=" & set "SIMULATE=0")
 
 rem Count revert files
 set "TOTAL_FILES=0"
@@ -481,9 +523,9 @@ if exist "!KEYBOARD_PATH!\" (
         echo 1: Low End (e.g., Dell KB216)
         echo 2: Mid Tier (e.g., Logitech K400 Plus)
         echo 3: High End (e.g., Corsair K95 RGB)
-        echo 4: Wooting 1000hz (e.g., Wooting Two)
-        echo 5: Wooting 8000hz (e.g., Wooting 60HE+)
-        echo 6: Other 8000hz (e.g., Razer Huntsman V2)
+        echo 4: 1000hz (e.g., Wooting Two)
+        echo 5: 8000hz (e.g., Wooting 60HE+)
+        echo 6: +8000hz (e.g., Razer Huntsman V2)
         :keyboard_prompt
         set "KB_CHOICE="
         <nul set /p "=[95mEnter choice (1-6): [0m"

@@ -16,10 +16,12 @@ A command-line tool to apply and revert Windows and CS2 performance tweaks via r
 - **CPU Tweaks**: AMD/Intel-specific optimizations.
 - **Game Tweaks**: High priority and thread settings for CS2.
 - **Services**: Disable unnecessary Windows services (Bluetooth, Xbox, etc. see Note #1).
-- **Latency**: Dynamic tick, HPET, and synthetic timer adjustments.
+- **Latency**: Dynamic tick, HPET, and synthetic timer adjustments. (AMD CPU only)
 - **Network**: Firewall rules for CS2.
 - **Graphics**: High-performance settings for CS2.
 - **Input**: Mouse precision fixes and keyboard polling rate tweaks.
+- **Debloat Windows**: See Note #1.
+- **Clear DirectX Shader Cache**: And verifies CS2 files.
 - **Revert Options**: Undo all or some changes.
 - **Simulation Mode**: Test tweaks without applying.
 
@@ -30,16 +32,14 @@ A command-line tool to apply and revert Windows and CS2 performance tweaks via r
 4. **Reboot**: Required after applying tuning tweaks or reverting tuning tweaks.
 
 ## Folder Structure
-- `1_CPU\AMD\`: AMD-specific tweaks (e.g., `AMD_CPU_Priority.reg`).
+- `1_CPU\AMD\`: AMD-specific tweaks (e.g., `AMD_CPU_Priority.reg/Latency_Tweaks.cmd`).
 - `2_Game\`: CS2 priority tweaks (e.g., `CS2_High_Priority.reg`).
-- `3_Services\`: Service disables (e.g., `Disable_Xbox_Services.reg`).
-- `4_Input\Mouse\`: Mouse tweaks (e.g., `Disable_Pointer_Precision_Globally_and_Fix_Delay.reg`).
-- `4_Input\Keyboard\`: Keyboard tweaks (e.g., `5_Wooting_Latest_Keyboard.reg`).
-- `5_Latency\`: Latency tweaks (e.g., `Latency_Tweaks.cmd`).
-- `6_Network\`: Network tweaks (e.g., `CS2_Firewall_Rules.cmd`).
-- `7_Graphics\`: Graphics tweaks (e.g., `CS2_High_Performance.cmd`).
-- `8_Features\`: Windows 11 tweaks (`Enable Taskbar End Task/Classic Right Click Menu`).
-- `9_Debloat\`: Debloat Windows (e.g., `See Note #1`).
+- `3_Input\Mouse\`: Mouse tweaks (e.g., `Disable_Pointer_Precision_Globally_and_Fix_Delay.reg`).
+- `3_Input\Keyboard\`: Keyboard tweaks (e.g., `5_Wooting_Latest_Keyboard.reg`).
+- `4_Network\`: Network tweaks (e.g., `CS2_Firewall_Rules.cmd`).
+- `5_Graphics\`: Graphics tweaks (e.g., `CS2_High_Performance.cmd`).
+- `6_Features\`: Windows 11 tweaks (`Enable Taskbar End Task/Classic Right Click Menu`).
+- `7_Debloat\`: Debloat Windows (e.g., `See Note #1`).
 - `*/Revert\`: Revert scripts (e.g., `Revert_Latency_Tweaks.cmd`).
 
 ## Prerequisites
