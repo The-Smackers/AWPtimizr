@@ -10,7 +10,7 @@
 **R**ollback Protection
 
 
-A command-line tool to apply and revert Windows and CS2 performance tweaks via registry and script files.
+A command-line tool to apply and revert common Windows and CS2 performance tweaks via registry and script files.
 
 ## Features
 - **CPU Tweaks**: AMD/Intel-specific optimizations.
