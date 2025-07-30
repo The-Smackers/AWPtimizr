@@ -1,4 +1,4 @@
-# The AWPtimizr
+# AWPtimizr
 **A**dvanced  
 **W**indows  
 **P**erformance  
