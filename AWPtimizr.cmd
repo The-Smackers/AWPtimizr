@@ -148,7 +148,7 @@ echo Scanning subfolders for tweaks...
 echo [%DATE% %TIME%] Scanning subfolders for tweaks... >> "!LOG_FILE!"
 
 for /d %%D in ("%~dp0*") do (
-    if /i NOT "%%~nxD"=="1_CPU" if /i NOT "%%~nxD"=="4_Input" if /i NOT "%%~nxD"=="Backup" (
+    if /i NOT "%%~nxD"=="1_CPU" if /i NOT "%%~nxD"=="3_Input" if /i NOT "%%~nxD"=="Backup" (
         for %%F in ("%%D\*.reg" "%%D\*.cmd") do (
             set "FILE_NAME=%%~nxF"
             set "SKIP=0"
@@ -178,7 +178,7 @@ if exist "!CPU_PATH!\" (
     )
 )
 
-set "MOUSE_PATH=%~dp04_Input\Mouse"
+set "MOUSE_PATH=%~dp03_Input\Mouse"
 if exist "!MOUSE_PATH!\" (
     for %%F in ("!MOUSE_PATH!\*.reg" "!MOUSE_PATH!\*.cmd") do (
         set "FILE_NAME=%%~nxF"
@@ -207,7 +207,7 @@ echo Total tweak files found: !TOTAL_FILES!
 echo [%DATE% %TIME%] Total tweak files found: !TOTAL_FILES! >> "!LOG_FILE!"
 
 for /d %%D in ("%~dp0*") do (
-    if /i NOT "%%~nxD"=="1_CPU" if /i NOT "%%~nxD"=="4_Input" if /i NOT "%%~nxD"=="Backup" (
+    if /i NOT "%%~nxD"=="1_CPU" if /i NOT "%%~nxD"=="3_Input" if /i NOT "%%~nxD"=="Backup" (
         echo Entering folder: %%~nxD
         echo [%DATE% %TIME%] Entering folder: %%~nxD >> "!LOG_FILE!"
         for %%F in ("%%D\*.reg" "%%D\*.cmd") do (
@@ -225,14 +225,14 @@ if exist "!CPU_PATH!\" (
 )
 
 if exist "!MOUSE_PATH!\" (
-    echo Entering folder: 4_Input\Mouse
-    echo [%DATE% %TIME%] Entering folder: 4_Input\Mouse >> "!LOG_FILE!"
+    echo Entering folder: 3_Input\Mouse
+    echo [%DATE% %TIME%] Entering folder: 3_Input\Mouse >> "!LOG_FILE!"
     for %%F in ("!MOUSE_PATH!\*.reg" "!MOUSE_PATH!\*.cmd") do (
         call :process_file "%%F" tweak
     )
 )
 
-set "KEYBOARD_PATH=%~dp04_Input\Keyboard"
+set "KEYBOARD_PATH=%~dp03_Input\Keyboard"
 if exist "!KEYBOARD_PATH!\" (
     call :process_keyboard tweak
 )
@@ -279,7 +279,7 @@ echo Scanning revert subfolders...
 echo [%DATE% %TIME%] Scanning revert subfolders... >> "!LOG_FILE!"
 
 for /d %%D in ("%~dp0*") do (
-    if /i NOT "%%~nxD"=="1_CPU" if /i NOT "%%~nxD"=="4_Input" if /i NOT "%%~nxD"=="Backup" (
+    if /i NOT "%%~nxD"=="1_CPU" if /i NOT "%%~nxD"=="3_Input" if /i NOT "%%~nxD"=="Backup" (
         if exist "%%D\Revert\" (
             for %%F in ("%%D\Revert\*.reg" "%%D\Revert\*.cmd") do (
                 set "FILE_NAME=%%~nxF"
@@ -302,7 +302,7 @@ if exist "!CPU_PATH!\Revert\" (
 )
 
 for %%S in ("Mouse" "Keyboard") do (
-    set "INPUT_PATH=%~dp04_Input\%%S"
+    set "INPUT_PATH=%~dp03_Input\%%S"
     if exist "!INPUT_PATH!\Revert\" (
         for %%F in ("!INPUT_PATH!\Revert\*.reg" "!INPUT_PATH!\Revert\*.cmd") do (
             set "FILE_NAME=%%~nxF"
@@ -325,7 +325,7 @@ echo Total revert files found: !TOTAL_FILES!
 echo [%DATE% %TIME%] Total revert files found: !TOTAL_FILES! >> "!LOG_FILE!"
 
 for /d %%D in ("%~dp0*") do (
-    if /i NOT "%%~nxD"=="1_CPU" if /i NOT "%%~nxD"=="4_Input" if /i NOT "%%~nxD"=="Backup" (
+    if /i NOT "%%~nxD"=="1_CPU" if /i NOT "%%~nxD"=="3_Input" if /i NOT "%%~nxD"=="Backup" (
         if exist "%%D\Revert\" (
             echo Entering folder: %%~nxD\Revert
             echo [%DATE% %TIME%] Entering folder: %%~nxD\Revert >> "!LOG_FILE!"
@@ -345,10 +345,10 @@ if exist "!CPU_PATH!\Revert\" (
 )
 
 for %%S in ("Mouse" "Keyboard") do (
-    set "INPUT_PATH=%~dp04_Input\%%S"
+    set "INPUT_PATH=%~dp03_Input\%%S"
     if exist "!INPUT_PATH!\Revert\" (
-        echo Entering folder: 4_Input\%%S\Revert
-        echo [%DATE% %TIME%] Entering folder: 4_Input\%%S\Revert >> "!LOG_FILE!"
+        echo Entering folder: 3_Input\%%S\Revert
+        echo [%DATE% %TIME%] Entering folder: 3_Input\%%S\Revert >> "!LOG_FILE!"
         for %%F in ("!INPUT_PATH!\Revert\*.reg" "!INPUT_PATH!\Revert\*.cmd") do (
             call :process_file "%%F" revert
         )
@@ -461,10 +461,10 @@ goto :eof
 rem Keyboard tweak selection subroutine
 :process_keyboard
 set "MODE_TYPE=%1"
-set "KEYBOARD_PATH=%~dp04_Input\Keyboard"
+set "KEYBOARD_PATH=%~dp03_Input\Keyboard"
 if exist "!KEYBOARD_PATH!\" (
-    echo Entering folder: 4_Input\Keyboard
-    echo [%DATE% %TIME%] Entering folder: 4_Input\Keyboard >> "!LOG_FILE!"
+    echo Entering folder: 3_Input\Keyboard
+    echo [%DATE% %TIME%] Entering folder: 3_Input\Keyboard >> "!LOG_FILE!"
     set /a PROCESSED_FILES+=1
     set /a "PERCENT=PROCESSED_FILES*100/TOTAL_FILES"
     if defined DEFAULT_CHOICE if /i "!DEFAULT_CHOICE!"=="s" (

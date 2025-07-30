@@ -40,3 +40,29 @@ My Take? Is It Okay?
 Yes, it’s safe and reasonable for CS2/FACEIT. These are common gaming tweaks (seen on X posts, Reddit, and optimization guides) with low risk.
 
 Recommendation: Apply them, but tweak Priority down to 4 or 3 if you notice background lag in other programs.
+
+Registry Tweak Explained:
+
+What It Does?
+
+disabledynamictick yes: Disables dynamic tick, forcing the CPU to use a fixed timer interval instead of idling efficiently.
+
+deletevalue useplatformclock: Removes HPET (High Precision Event Timer) reliance, falling back to older timers (e.g., ACPI).
+
+useplatformtick yes: Forces use of legacy platform tick (e.g., TSC or LAPIC), bypassing synthetic timers.
+
+Safety?
+
+BSOD Risk: Low but not zero. Tweaking timers can destabilize drivers (e.g., NVIDIA, network) if they expect HPET.
+
+FACEIT Anti-Cheat: Safe—FAC allows timer tweaks (common in CS2 optimization guides on X). No ban risk.
+
+Effectiveness?
+
+CS2: Mixed. Disabling HPET/dynamic tick might reduce input lag (~1-5ms) or stabilize FPS in CPU-bound scenarios (e.g., 1080p 240Hz), but modern CPUs (e.g., Ryzen 5xxx, Intel 12th+) and Windows 11 prefer dynamic tick for efficiency. Gains are anecdotal—some report 5-10 FPS, others see no change or worse stutters.
+
+Downside: Higher CPU usage at idle (5-10%), more heat, and potential timer drift in long sessions.
+
+Verdict? Is It Okay?
+
+Yes, but questionable benefit. Test FPS/stutters in CS2—revert if no gain.

@@ -1,0 +1,27 @@
+CS2_Firewall_Rules.cmd
+
+Features: Auto Configurable CS2_PATH, defaults to standard location.
+
+Rules:
+Inbound: Allow TCP/UDP traffic—CS2 servers can connect.
+
+Outbound: Allow TCP/UDP traffic—CS2 can reach servers.
+   
+Effect: Ensures multiplayer works—ports like 27015-27050 (Valve’s range) flow free.
+
+Automating with netsh
+Tool: netsh advfirewall firewall—controls Windows Firewall via command line.
+
+Needs Admin: This requires elevation (UAC).
+
+Commands:
+Inbound: Allow cs2.exe incoming traffic.
+
+Outbound: Allow cs2.exe outgoing traffic.
+
+Revert Script: Revert_CS2_Firewall_Rules.cmd
+Goal: Remove the rules.
+
+
+
+
