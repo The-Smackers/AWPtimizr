@@ -32,6 +32,26 @@ A command-line tool to apply and revert common Windows and CS2 performance tweak
    - `AWPtimizr.cmd`: Apply or Revert all changes/tweaks with prompts.
 4. **Reboot**: Required after applying tuning tweaks or reverting tuning tweaks.
 
+### Usage Notes
+- Check `Summary_*/Optimization_Log.txt` after execution for a detailed run history.
+- Backups are stored in the `Summary_*/Backup` subfolder.
+
+### Usage Example
+```cmd
+Choose execution mode:
+1: Prompt for each file (advanced)
+2: Execute all automatically (default)
+3: Skip all automatically (exit)
+4: Simulate all (no changes applied)
+5: Delete DirectX Shader Cache (fix for FPS loss)
+Enter choice (1-5):
+
+[1/10] [10%] Found: Disable_Telemetry.reg
+Preview (p), Execute (e), or Skip (s)? e
+[1/10] Applying: Disable_Telemetry.reg
+[1/10] Success: Disable_Telemetry.reg
+```
+
 ## Folder Structure
 - `1_CPU\AMD\`: AMD-specific tweaks (e.g., `AMD_CPU_Priority.reg/Latency_Tweaks.cmd`).
 - `2_Game\`: CS2 priority tweaks (e.g., `CS2_High_Priority.reg`).
@@ -89,26 +109,6 @@ To test, select simulation mode:
 For real changes to system, use modes 1-3. Logs distinguish between "Success" (real) and "Simulated success" (dry run), with a reboot recommended after real runs.
 
 Ensure all referenced `.reg` and `.cmd` files exist in their respective subfolders for full functionality.
-
-### Usage Notes
-- Check `Optimization_Log.txt` after execution for a detailed run history.
-- Backups are timestamped (e.g., `HKLM_SYSTEM_20250408.reg`) and stored in the `Backup` subfolder.
-
-### Example
-```cmd
-Choose execution mode:
-1: Prompt for each file (advanced)
-2: Execute all automatically (default)
-3: Skip all automatically (exit)
-4: Simulate all (no changes applied)
-5: Delete DirectX Shader Cache (fix for FPS loss)
-Enter choice (1-5):
-
-[1/10] [10%] Found: Disable_Telemetry.reg
-Preview (p), Execute (e), or Skip (s)? e
-[1/10] Applying: Disable_Telemetry.reg
-[1/10] Success: Disable_Telemetry.reg
-```
 
 ## Notes
 - Tested on Ryzen 7 7800X3D, RTX 4080 SUPER.
