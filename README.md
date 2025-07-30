@@ -11,7 +11,7 @@
 
 ![AWPtimizr Logo](./logo.png)
 
-A command-line tool to apply and revert common Windows and CS2 performance tweaks via registry and script files.
+A command-line tool to apply and revert common Windows and CS2 performance tweaks via registry and script files. VAC, VACnet and FACEIT Anti-Cheat safe.
 
 ## Features
 - **CPU Tweaks**: AMD/Intel-specific optimizations.
