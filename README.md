@@ -97,11 +97,12 @@ Run the script with admin privileges to apply tweaks. Ensure all referenced `.re
 ### Example
 ```cmd
 Choose execution mode:
-1: Prompt for each file (default)
-2: Execute all automatically
+1: Prompt for each file (advanced)
+2: Execute all automatically (default)
 3: Skip all automatically (exit)
 4: Simulate all (no changes applied)
-Enter choice (1-4):
+5: Delete DirectX Shader Cache (fix for FPS loss)
+Enter choice (1-5):
 
 [1/10] [10%] Found: Disable_Telemetry.reg
 Preview (p), Execute (e), or Skip (s)? e
@@ -115,13 +116,13 @@ Preview (p), Execute (e), or Skip (s)? e
 
 ## Why?
 Inspiration from [Chris Titus Tech's Windows Utility](https://github.com/ChrisTitusTech/winutil).  
-Some tweaks based on this video: [Make Your CS2 RUN BETTER - (packet loss, latency, clean)](https://www.youtube.com/watch?v=qG7C4W-EQl4) by [youtube.com/@KEROVSKI_](https://www.youtube.com/@KEROVSKI_).
+Some tweaks based on this video: [Make Your CS2 RUN BETTER - (packet loss, latency, clean)](https://www.youtube.com/watch?v=qG7C4W-EQl4).
 
 ## Contribute
 - **Bugs** Fork it, tweak it, share it.  
 - **License**: GNU  
-- **More**: Catch TerminalTanks on YouTube—[youtube.com/@TerminalTanks](https://www.youtube.com/@TerminalTanks).
-- **Who**: TerminalTanks(idk) is a member of The Smackers.
+- **More**: TerminalTanks on YouTube—[youtube.com/@TerminalTanks](https://www.youtube.com/@TerminalTanks).
+- **Who**: TerminalTanks (idk) is a member of The Smackers.
 
 ## 💖 Support
-If you find this project helpful, consider [donating via PayPal](https://www.paypal.com/ncp/payment/8UEVM2WHXGL88).
+If you find this project or developer helpful, consider [donating via PayPal](https://www.paypal.com/ncp/payment/8UEVM2WHXGL88).

@@ -170,8 +170,8 @@ call :backup_registry "applying"
 
 rem Execution mode selection with light purple
 echo [95mChoose execution mode:[0m
-echo [95m1: Prompt for each file (default)[0m
-echo [95m2: Execute all automatically[0m
+echo [95m1: Prompt for each file (advanced choice)[0m
+echo [95m2: Execute all automatically (default choice)[0m
 echo [95m3: Skip all automatically (exit)[0m
 echo [95m4: Simulate all (no changes applied)[0m
 echo [95m5: Delete DirectX Shader Cache (fix for FPS loss)[0m
@@ -304,11 +304,11 @@ call :detect_cpu
 
 rem Execution mode selection with light purple
 echo [95mChoose execution mode:[0m
-echo [95m1: Prompt for each file (default)[0m
-echo [95m2: Execute all automatically[0m
+echo [95m1: Prompt for each file (advanced choice)[0m
+echo [95m2: Execute all automatically (default choice)[0m
 echo [95m3: Skip all automatically (exit)[0m
 echo [95m4: Simulate all (no changes applied)[0m
-echo [95m5: Delete DirectX Shader Cache[0m
+echo [95m5: Delete DirectX Shader Cache (fix for FPS loss)[0m
 <nul set /p "=[95mEnter choice (1-5): [0m"
 set /p "MODE="
 if "!MODE!"=="2" (set "DEFAULT_CHOICE=e") else if "!MODE!"=="3" (set "DEFAULT_CHOICE=s") else if "!MODE!"=="4" (set "SIMULATE=1" & set "DEFAULT_CHOICE=e") else if "!MODE!"=="5" (call :clear_dx_cache & pause & goto revert) else (set "DEFAULT_CHOICE=" & set "SIMULATE=0")
