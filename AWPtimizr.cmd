@@ -23,20 +23,20 @@ if %errorlevel% neq 0 (
 )
 
 rem Announce startup
-echo Starting TerminalTanks CS2 Tweaks Combined Tool...
+echo Starting TerminalTanks AWPtimizr Tuning Tool...
 
 rem Set up logging—single log for consistency
 set "LOG_FILE=!SUMMARY_DIR!\Optimization_Log.txt"
-echo [%DATE% %TIME%] Starting combined tweak/revert tool... >> "!LOG_FILE!"
+echo [%DATE% %TIME%] Starting AWPtimizr Tuning Tool... >> "!LOG_FILE!"
 
 rem Main menu loop—combined options with light purple color
 :menu
 cls
-echo [95mTerminalTanks CS2 Tweaks Combined Tool[0m
+echo [95mAWPtimizr Tuning Tool[0m
 echo [95mCurrent Date: %DATE%[0m
 echo.
-echo [95m1. Execute TerminalTanks CS2 Tweaks Menu[0m
-echo [95m2. Revert TerminalTanks CS2 Tweaks Menu[0m
+echo [95m1. Execute AWPtimizr Tuning Tool Menu[0m
+echo [95m2. Revert AWPtimizr Tuning Tool Menu[0m
 echo [95m3. Exit[0m
 echo.
 set "MENU_CHOICE="
@@ -239,11 +239,11 @@ if exist "!KEYBOARD_PATH!\" (
 
 rem Completion message based on execution
 if "!SIMULATE!"=="1" (
-    echo Simulation of CS2 Tweaks complete! No changes applied.
+    echo Simulation of AWPtimizr Tuning Tool complete! No changes applied.
     echo [%DATE% %TIME%] Simulation complete! >> "!LOG_FILE!"
 ) else if !EXECUTED_FILES! gtr 0 (
-    echo CS2 Tweaks application complete! Restart recommended.
-    echo [%DATE% %TIME%] CS2 Tweaks application complete! Restart recommended. >> "!LOG_FILE!"
+    echo AWPtimizr Tuning Tool complete! Restart recommended.
+    echo [%DATE% %TIME%] AWPtimizr Tuning Tool complete! Restart recommended. >> "!LOG_FILE!"
 ) else (
     echo All tweak files skipped. No changes applied.
     echo [%DATE% %TIME%] All tweak files skipped. No changes applied. >> "!LOG_FILE!"
@@ -265,7 +265,7 @@ rem Execution mode selection with light purple
 echo [95mChoose execution mode:[0m
 echo [95m1: Prompt for each file (default)[0m
 echo [95m2: Execute all automatically[0m
-echo [95m3: Skip all automatically[0m
+echo [95m3: Skip all automatically (exit)[0m
 echo [95m4: Simulate all (no changes applied)[0m
 <nul set /p "=[95mEnter choice (1-4): [0m"
 set /p "MODE="
@@ -357,11 +357,11 @@ for %%S in ("Mouse" "Keyboard") do (
 
 rem Completion message based on execution
 if "!SIMULATE!"=="1" (
-    echo Simulation of revert CS2 tweaks complete! No changes applied.
+    echo Simulation of revert AWPtimizr Tuning Tool complete! No changes applied.
     echo [%DATE% %TIME%] Simulation complete! >> "!LOG_FILE!"
 ) else if !EXECUTED_FILES! gtr 0 (
-    echo Revert CS2 tweaks application complete! Reboot recommended.
-    echo [%DATE% %TIME%] Revert CS2 tweaks application complete! Reboot recommended. >> "!LOG_FILE!"
+    echo Revert AWPtimizr Tuning Tool complete! Reboot recommended.
+    echo [%DATE% %TIME%] Revert AWPtimizr Tuning Tool complete! Reboot recommended. >> "!LOG_FILE!"
 ) else (
     echo All revert files skipped. No changes applied.
     echo [%DATE% %TIME%] All revert files skipped. No changes applied. >> "!LOG_FILE!"
