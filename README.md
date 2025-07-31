@@ -111,7 +111,7 @@ Disable Windows Event Collector
 
 ## Why does this program exist?
 Inspired from [Chris Titus Tech's Windows Utility](https://github.com/ChrisTitusTech/winutil).  
-Inspired from [@fREQUENCYCS on X](https://x.com/fREQUENCYCS)
+Inspired from [@fREQUENCYCS on X](https://x.com/fREQUENCYCS)  
 Inspired from [Why Disabling The HPET Makes Sense](https://www.xbitlabs.com/how-to-get-better-latency-in-windows/).  
 Some tweaks based on this video: [Make Your CS2 RUN BETTER - (packet loss, latency, clean)](https://www.youtube.com/watch?v=qG7C4W-EQl4).
 
