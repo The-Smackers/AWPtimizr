@@ -26,6 +26,18 @@ A command-line tool to apply and revert common Windows and CS2 performance tweak
 - **Revert Options**: Undo all or some changes.
 - **Simulation Mode**: Test tweaks without applying.
 
+## Create Restore Point
+1. Search "restore point" in your Windows Search bar
+2. Click Create a restore point
+3. Select your C: drive then click Configure in the bottom right
+4. Select Turn on system protection, then slide the bar to 10GB then click Apply and OK
+5. Click Create and set a name for the Restore point, then click Create
+6. Click Ok then restart PC
+
+![System Restore](https://raw.githubusercontent.com/The-Smackers/PC-Optimizations/refs/heads/main/static/System_restore1.png)
+![System Restore](https://raw.githubusercontent.com/The-Smackers/PC-Optimizations/refs/heads/main/static/System_restore2.png)
+![System Restore](https://raw.githubusercontent.com/The-Smackers/PC-Optimizations/refs/heads/main/static/System_restore3.png)
+
 ## Usage
 1. **Clone/Download**: Grab the repo or [download latest release](https://github.com/The-Smackers/AWPtimizr/releases) and unzip if needed.
 2. **Run in terminal or click file**: (Prompts for Admin privileges)
