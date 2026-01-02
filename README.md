@@ -116,7 +116,7 @@ Inspired from [Why Disabling The HPET Makes Sense](https://www.xbitlabs.com/how-
 Some tweaks based on this video: [Make Your CS2 RUN BETTER - (packet loss, latency, clean)](https://www.youtube.com/watch?v=qG7C4W-EQl4).
 
 ## About
-- **License**: GPL v3  
+- **License**: MIT 
 - **Links**: [youtube.com/@TerminalTanks](https://www.youtube.com/@TerminalTanks).
 - **Who**: idk/Pb is a member of The Smackers.
 
